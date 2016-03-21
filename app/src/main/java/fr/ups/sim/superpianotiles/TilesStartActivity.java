@@ -29,6 +29,7 @@ public class TilesStartActivity extends Activity {
 
         //ICI - Commentez le code
         TilesView tilesView = (TilesView) findViewById(R.id.view);
+        //je rajoute ca
 
         /*TilesLevel level = new TilesLevel();
         level.addTile(0, new Tile(2));
