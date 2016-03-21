@@ -20,12 +20,12 @@ import java.util.Random;
  */
 public class TilesView extends View {
 
-    private static int NB_TILES_LARGEUR = 5;
-    private static int NB_TILES_HAUTEUR = 4;
+    public static int NB_TILES_LARGEUR = 5;
+    public static int NB_TILES_HAUTEUR = 4;
 
-    private static int NIVEAU_FACILE = 0;
-    private static int NIVEAU_NORMAL = 1;
-    private static int NIVEAU_DIFFICILE = 2;
+    public static int NIVEAU_FACILE = 0;
+    public static int NIVEAU_NORMAL = 1;
+    public static int NIVEAU_DIFFICILE = 2;
 
     private int tileColor = Color.BLUE;
     private int clickedTileColor = Color.RED;
@@ -83,7 +83,8 @@ public class TilesView extends View {
         pText.setColor(textColor);
         pTile.setColor(tileColor);
 
-        niveau = NIVEAU_DIFFICILE;
+
+        //niveau = NIVEAU_DIFFICILE;
 
         level = new TilesLevel();
         Tile t = generateRandomTile();
@@ -102,21 +103,6 @@ public class TilesView extends View {
                 level.addTile(i, t);
             }
         }
-        /*level.addTile(0, new Tile(2));
-        level.addTile(0, new Tile(0));
-        level.addTile(1, new Tile(3));
-        level.addTile(2, new Tile(4));
-        t = new Tile(3);
-        t.setClicked();
-        level.addTile(3, t);
-        level.addTile(4, new Tile(4));
-        level.addTile(5, new Tile(2));
-        level.addTile(5, new Tile(0));
-        level.addTile(6, new Tile(3));
-        level.addTile(6, new Tile(4));
-        level.addTile(7, new Tile(3));
-        level.addTile(7, new Tile(4));*/
-        System.out.println(level);
     }
 
     private int nbTileRandom(int niveau) {
@@ -170,9 +156,8 @@ public class TilesView extends View {
                 Tile[] tiles = level.getTiles(hauteur);
                 if (tiles != null)
                 {
-                    for (int i = 0 ; i<tiles.length ; ++i)
-                    {
-                        addTile(tiles[i], hauteur, canvas);
+                    for (Tile tile : tiles) {
+                        addTile(tile, hauteur, canvas);
                         /*int left = tiles[i].getPosition() * largeurTile;
                         int top = decalage + (NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
                         int right = left + largeurTile;
@@ -265,6 +250,10 @@ public class TilesView extends View {
     public void setLevel(TilesLevel level)
     {
         this.level = level;
+    }
+
+    public void setNiveau(int niveau) {
+        this.niveau = niveau;
     }
 
     public void incrementeDecalage()

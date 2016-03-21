@@ -1,6 +1,7 @@
 package fr.ups.sim.superpianotiles;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.util.Log;
@@ -30,23 +31,9 @@ public class TilesStartActivity extends Activity {
         //ICI - Commentez le code
         TilesView tilesView = (TilesView) findViewById(R.id.view);
 
-        /*TilesLevel level = new TilesLevel();
-        level.addTile(0, new Tile(2));
-        level.addTile(0, new Tile(0));
-        level.addTile(1, new Tile(3));
-        level.addTile(2, new Tile(4));
-        Tile t = new Tile(3);
-        t.setClicked();
-        level.addTile(3, t);
-        level.addTile(4, new Tile(4));
-        level.addTile(5, new Tile(2));
-        level.addTile(5, new Tile(0));
-        level.addTile(6, new Tile(3));
-        level.addTile(6, new Tile(4));
-        level.addTile(7, new Tile(3));
-        level.addTile(7, new Tile(4));
-        System.out.println(level);
-        tilesView.setLevel(level);*/
+        Intent intent = getIntent();
+        System.out.println("niveau = " + intent.getIntExtra("niveau", 0));
+        tilesView.setNiveau(intent.getIntExtra("niveau", 0));
 
                 //ICI - Commentez le code
         tilesView.setOnTouchListener(new View.OnTouchListener() {
