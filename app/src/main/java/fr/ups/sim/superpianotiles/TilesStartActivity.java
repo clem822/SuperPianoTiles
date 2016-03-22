@@ -123,7 +123,7 @@ public class TilesStartActivity extends Activity {
             evt.getX();
             if (tilesQueue != null)
             {
-                for (int hauteur = 0 ; hauteur<TilesStartActivity.NB_TILES_HAUTEUR+1 ; ++hauteur)
+                for (int hauteur = 0 ; hauteur < this.NB_TILES_HAUTEUR+1 ; hauteur++)
                 {
                     int largeurTile = tilesView.getContentWidth()/TilesStartActivity.NB_TILES_LARGEUR;
                     int hauteurTile = tilesView.getContentHeight()/TilesStartActivity.NB_TILES_HAUTEUR;
