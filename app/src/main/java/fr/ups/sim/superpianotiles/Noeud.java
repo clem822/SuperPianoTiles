@@ -39,18 +39,16 @@ public class Noeud {
         return precedent;
     }
 
-    public Tile[] getTiles() {
-        Tile[] ret = Arrays.copyOf(tiles.toArray(), tiles.toArray().length, Tile[].class);
-        return ret;
+    public NavigableSet<Tile> getTiles() {
+        return tiles;
     }
 
     @Override
     public String toString() {
         String str = new String();
-        Tile[] tab = getTiles();
-        for (int i = 0 ; i<tab.length ; ++i)
-        {
-            str += " " + tab[i].toString();
+        NavigableSet<Tile> tiles = getTiles();
+        for (Tile tile : tiles) {
+            str += " " + tile.toString();
         }
         return str;
     }

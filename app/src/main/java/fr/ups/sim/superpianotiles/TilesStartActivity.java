@@ -15,8 +15,8 @@ import java.util.TimerTask;
 
 public class TilesStartActivity extends Activity {
 
-    public static int NB_TILES_LARGEUR = 5;
-    public static int NB_TILES_HAUTEUR = 4;
+    public static final int NB_TILES_LARGEUR = 5;
+    public static final int NB_TILES_HAUTEUR = 4;
 
     public static final int NIVEAU_FACILE = 0;
     public static final int NIVEAU_NORMAL = 1;
@@ -26,6 +26,7 @@ public class TilesStartActivity extends Activity {
     private Timer timer = new Timer();
     private TilesQueue tilesQueue;
     private int niveau;
+    //pas forcément utile d'afficher le numéro si on affiche en haut
     private int numeroTileCourant = 1;
 
     private double frequenceDeDefilement = 1.0; //(en Hz)
@@ -211,16 +212,6 @@ public class TilesStartActivity extends Activity {
                 default:
                     break;
             }
-            /*if (nbTile == 1 || nbTile == 2)
-            {
-                t = generateRandomTile(numeroTileCourant++);
-                tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
-            }
-            if (nbTile == 2)
-            {
-                t = generateRandomTile(numeroTileCourant++, t.getPosition());
-                tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
-            }*/
         }
 
         tilesView.setDecalage(deltaT, periodeDeDefilement);
