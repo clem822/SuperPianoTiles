@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.Date;
+import java.util.NavigableSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -126,7 +127,7 @@ public class TilesStartActivity extends Activity {
                 {
                     int largeurTile = tilesView.getContentWidth()/TilesStartActivity.NB_TILES_LARGEUR;
                     int hauteurTile = tilesView.getContentHeight()/TilesStartActivity.NB_TILES_HAUTEUR;
-                    Tile[] tiles = tilesQueue.getTiles(hauteur);
+                    NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
                     if (tiles != null)
                     {
                         for (Tile tile : tiles) {
