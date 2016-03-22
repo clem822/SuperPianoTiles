@@ -137,6 +137,10 @@ public class TilesView extends View {
         postInvalidate();
     }
 
+    public int getDecalage(){
+        return decalage;
+    }
+
        /**
      * Gets the example drawable attribute value.
      *
@@ -154,6 +158,19 @@ public class TilesView extends View {
      */
     public void setExampleDrawable(Drawable exampleDrawable) {
         mExampleDrawable = exampleDrawable;
+    }
+
+
+    public int getContentWidth() {
+        int paddingLeft = getPaddingLeft();
+        int paddingRight = getPaddingRight();
+        return getWidth() - paddingLeft - paddingRight;
+    }
+
+    public int getContentHeight() {
+        int paddingTop = getPaddingTop();
+        int paddingBottom = getPaddingBottom();
+        return getHeight() - paddingTop - paddingBottom;
     }
 
 }
