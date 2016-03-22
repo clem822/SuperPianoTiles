@@ -42,8 +42,8 @@ public class TilesStartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiles_start);
 
-        System.out.println(periodeDeRafraichissement);
-        System.out.println(periodeDeDefilement);
+        //System.out.println(periodeDeRafraichissement);
+        //System.out.println(periodeDeDefilement);
 
         //ICI - Commentez le code
         tilesView = (TilesView) findViewById(R.id.view);
@@ -107,7 +107,7 @@ public class TilesStartActivity extends Activity {
      * ICI - Commentez le code
      */
     private boolean onTouchEventHandler (MotionEvent evt){
-        Log.i("TilesView", "Touch event handled");
+        //Log.i("TilesView", "Touch event handled");
         tempsCourant = new Date().getTime();
         tempsDebut = tempsCourant;
         timer.schedule(new TimerTask() {

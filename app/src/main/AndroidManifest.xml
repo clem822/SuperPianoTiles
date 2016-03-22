@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".TilesStartActivity"
-            android:label="@string/title_activity_tiles_start" />
+            android:label="@string/title_activity_tiles_start"
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
     </application>
 
 </manifest>
