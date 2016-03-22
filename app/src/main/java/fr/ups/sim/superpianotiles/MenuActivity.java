@@ -22,7 +22,7 @@ public class MenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, TilesStartActivity.class);
-                intent.putExtra("niveau", TilesView.NIVEAU_FACILE);
+                intent.putExtra("niveau", TilesStartActivity.NIVEAU_FACILE);
                 startActivity(intent);
             }
         });
@@ -32,7 +32,7 @@ public class MenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, TilesStartActivity.class);
-                intent.putExtra("niveau", TilesView.NIVEAU_NORMAL);
+                intent.putExtra("niveau", TilesStartActivity.NIVEAU_NORMAL);
                 startActivity(intent);
             }
         });
@@ -42,7 +42,7 @@ public class MenuActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, TilesStartActivity.class);
-                intent.putExtra("niveau", TilesView.NIVEAU_DIFFICILE);
+                intent.putExtra("niveau", TilesStartActivity.NIVEAU_DIFFICILE);
                 startActivity(intent);
             }
         });

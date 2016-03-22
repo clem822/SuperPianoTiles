@@ -7,7 +7,7 @@ import java.util.TreeSet;
 /**
  * Created by clem3 on 20/03/2016.
  */
-public class TilesLevel {
+public class TilesQueue {
     private Noeud bas;
     private Noeud haut;
     //nombre de noeuds entre haut et bas (compris)
@@ -76,8 +76,10 @@ public class TilesLevel {
     public void supprimerLigneBasse() {
         if (bas != null)
         {
+            //System.out.println(this);
             bas = bas.getSuivant();
             --hauteurRestante;
+            bas.setPrecedent(null);
             if (hauteurRestante == 0)
                 haut = null;
             //System.out.println(bas);

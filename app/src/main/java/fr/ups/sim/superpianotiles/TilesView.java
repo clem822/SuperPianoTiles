@@ -8,24 +8,13 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.support.v4.util.Pair;
 import android.util.AttributeSet;
 import android.view.View;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Custom view that displays tiles
  */
 public class TilesView extends View {
-
-    public static int NB_TILES_LARGEUR = 5;
-    public static int NB_TILES_HAUTEUR = 4;
-
-    public static int NIVEAU_FACILE = 0;
-    public static int NIVEAU_NORMAL = 1;
-    public static int NIVEAU_DIFFICILE = 2;
 
     private int tileColor = Color.BLUE;
     private int clickedTileColor = Color.RED;
@@ -34,20 +23,12 @@ public class TilesView extends View {
     private float textSize = 40;
     Paint pText = new Paint();
     Paint pTile = new Paint();
-    //private List<Pair<Integer, Integer>> tiles;
-    TilesLevel level;
-    private int decalage = 0;
 
     private int largeurTile;
     private int hauteurTile;
-    private int paddingLeft;
-    private int paddingTop;
-    private int paddingRight;
-    private int paddingBottom;
-    private int contentWidth;
-    private int contentHeight;
 
-    private int niveau;
+    TilesQueue tilesQueue;
+    private int decalage = 0;
 
 
     public TilesView(Context context) {
@@ -82,87 +63,32 @@ public class TilesView extends View {
         pText.setTextSize(textSize);
         pText.setColor(textColor);
         pTile.setColor(tileColor);
-
-
-        //niveau = NIVEAU_DIFFICILE;
-
-        level = new TilesLevel();
-        Tile t = generateRandomTile();
-        level.addTile(0, t);
-        for (int i = 1 ; i<NB_TILES_HAUTEUR+2 ; ++i)
-        {
-            int nbTile = nbTileRandom(niveau);
-            if (nbTile == 1 || nbTile == 2)
-            {
-                t = generateRandomTile();
-                level.addTile(i, t);
-            }
-            if (nbTile == 2)
-            {
-                t = generateRandomTile(t.getPosition());
-                level.addTile(i, t);
-            }
-        }
-    }
-
-    private int nbTileRandom(int niveau) {
-        if (niveau == NIVEAU_FACILE)
-        {
-            return (int)Math.round(Math.random());
-        }
-        else if (niveau == NIVEAU_NORMAL)
-        {
-            return 1;
-        }
-        else if (niveau == NIVEAU_DIFFICILE)
-        {
-            return (int)Math.round(Math.random() * 1.5 + 0.5);
-        }
-        return 0;
-    }
-
-    private Tile generateRandomTile() {
-        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5));
-    }
-
-    private Tile generateRandomTile(int positionInterdite) {
-        int pos;
-        do
-        {
-            pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
-        } while (pos == positionInterdite);
-        return new Tile(pos);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        paddingLeft = getPaddingLeft();
-        paddingTop = getPaddingTop();
-        paddingRight = getPaddingRight();
-        paddingBottom = getPaddingBottom();
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop();
+        int paddingRight = getPaddingRight();
+        int paddingBottom = getPaddingBottom();
 
-        contentWidth = getWidth() - paddingLeft - paddingRight;
-        contentHeight = getHeight() - paddingTop - paddingBottom;
+        int contentWidth = getWidth() - paddingLeft - paddingRight;
+        int contentHeight = getHeight() - paddingTop - paddingBottom;
 
-        largeurTile = contentWidth/NB_TILES_LARGEUR;
-        hauteurTile = contentHeight/NB_TILES_HAUTEUR;
+        largeurTile = contentWidth/TilesStartActivity.NB_TILES_LARGEUR;
+        hauteurTile = contentHeight/TilesStartActivity.NB_TILES_HAUTEUR;
 
-        if (level != null)
+        if (tilesQueue != null)
         {
-            for (int hauteur = 0 ; hauteur<NB_TILES_HAUTEUR+1 ; ++hauteur)
+            for (int hauteur = 0 ; hauteur<TilesStartActivity.NB_TILES_HAUTEUR+1 ; ++hauteur)
             {
-                Tile[] tiles = level.getTiles(hauteur);
+                Tile[] tiles = tilesQueue.getTiles(hauteur);
                 if (tiles != null)
                 {
                     for (Tile tile : tiles) {
                         addTile(tile, hauteur, canvas);
-                        /*int left = tiles[i].getPosition() * largeurTile;
-                        int top = decalage + (NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
-                        int right = left + largeurTile;
-                        int bottom = top + hauteurTile;
-                        addTile("1", new RectF(left, top, right, bottom), tiles[i].isClicked(), canvas);*/
                     }
                 }
             }
@@ -176,25 +102,6 @@ public class TilesView extends View {
         }
     }
 
-    public void addTile(String order, RectF rect, Canvas canvas) {
-        canvas.drawRoundRect(rect, 2, 2, pTile);
-        Rect r = new Rect();
-        pText.getTextBounds(order, 0, order.length(), r);
-        canvas.drawText(order, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);
-    }
-
-    public void addTile(String order, RectF rect, boolean isClicked, Canvas canvas) {
-        if (isClicked)
-            pTile.setColor(clickedTileColor);
-        else
-            pTile.setColor(tileColor);
-
-        canvas.drawRoundRect(rect, 2, 2, pTile);
-        Rect r = new Rect();
-        pText.getTextBounds(order, 0, order.length(), r);
-        canvas.drawText(order, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);
-    }
-
     public void addTile(Tile tile, int hauteur, Canvas canvas) {
         if (tile.isClicked())
             pTile.setColor(clickedTileColor);
@@ -202,7 +109,7 @@ public class TilesView extends View {
             pTile.setColor(tileColor);
 
         int left = tile.getPosition() * largeurTile;
-        int top = decalage + (NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
+        int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
         int right = left + largeurTile;
         int bottom = top + hauteurTile;
 
@@ -216,7 +123,7 @@ public class TilesView extends View {
             pTile.setColor(tileColor);
 
         int left = tile.getPosition() * largeurTile;
-        int top = decalage + (NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
+        int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
         int right = left + largeurTile;
         int bottom = top + hauteurTile;
 
@@ -226,6 +133,16 @@ public class TilesView extends View {
         Rect r = new Rect();
         pText.getTextBounds(order, 0, order.length(), r);
         canvas.drawText(order, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);
+    }
+
+    public void setTilesQueue(TilesQueue tilesQueue)
+    {
+        this.tilesQueue = tilesQueue;
+    }
+
+    public void setDecalage(double deltaT, double periodeDeDefilement) {
+        decalage = (int) (deltaT * hauteurTile / periodeDeDefilement);
+        postInvalidate();
     }
 
        /**
@@ -247,35 +164,4 @@ public class TilesView extends View {
         mExampleDrawable = exampleDrawable;
     }
 
-    public void setLevel(TilesLevel level)
-    {
-        this.level = level;
-    }
-
-    public void setNiveau(int niveau) {
-        this.niveau = niveau;
-    }
-
-    public void incrementeDecalage()
-    {
-        decalage += 1;
-        if (decalage >= hauteurTile)
-        {
-            decalage -= hauteurTile;
-            level.supprimerLigneBasse();
-
-            int nbTile = nbTileRandom(niveau);
-            Tile t = null;
-            if (nbTile == 1 || nbTile == 2)
-            {
-                t = generateRandomTile();
-                level.addTile(NB_TILES_HAUTEUR+1, t);
-            }
-            if (nbTile == 2)
-            {
-                t = generateRandomTile(t.getPosition());
-                level.addTile(NB_TILES_HAUTEUR+1, t);
-            }
-        }
-    }
 }
