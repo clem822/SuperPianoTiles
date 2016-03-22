@@ -86,6 +86,20 @@ public class TilesQueue {
         }
     }
 
+    public void ajouterLigneVide(int hauteur)
+    {
+        if (hauteur >= 0)
+        {
+            if (bas == null)
+                ajouterNoeud();
+
+            while (hauteurRestante <= hauteur)
+            {
+                ajouterNoeud();
+            }
+        }
+    }
+
     @Override
     public String toString() {
         String str = new String();

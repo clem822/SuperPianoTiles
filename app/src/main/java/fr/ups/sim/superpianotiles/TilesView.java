@@ -122,25 +122,6 @@ public class TilesView extends View {
         canvas.drawText(numero, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);
     }
 
-    public void addTile(String order, Tile tile, int hauteur, Canvas canvas) {
-        if (tile.isClicked())
-            pTile.setColor(clickedTileColor);
-        else
-            pTile.setColor(tileColor);
-
-        int left = tile.getPosition() * largeurTile;
-        int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
-        int right = left + largeurTile;
-        int bottom = top + hauteurTile;
-
-        RectF rect = new RectF(left, top, right, bottom);
-        canvas.drawRoundRect(rect, 2, 2, pTile);
-
-        Rect r = new Rect();
-        pText.getTextBounds(order, 0, order.length(), r);
-        canvas.drawText(order, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);
-    }
-
     public void setTilesQueue(TilesQueue tilesQueue)
     {
         this.tilesQueue = tilesQueue;

@@ -18,9 +18,9 @@ public class TilesStartActivity extends Activity {
     public static int NB_TILES_LARGEUR = 5;
     public static int NB_TILES_HAUTEUR = 4;
 
-    public static int NIVEAU_FACILE = 0;
-    public static int NIVEAU_NORMAL = 1;
-    public static int NIVEAU_DIFFICILE = 2;
+    public static final int NIVEAU_FACILE = 0;
+    public static final int NIVEAU_NORMAL = 1;
+    public static final int NIVEAU_DIFFICILE = 2;
 
     private TilesView tilesView;
     private Timer timer = new Timer();
@@ -59,15 +59,22 @@ public class TilesStartActivity extends Activity {
         for (int i = 1 ; i<NB_TILES_HAUTEUR+2 ; ++i)
         {
             int nbTile = nbTileRandom(niveau);
-            if (nbTile == 1 || nbTile == 2)
-            {
-                t = generateRandomTile(numeroTileCourant++);
-                tilesQueue.addTile(i, t);
-            }
-            if (nbTile == 2)
-            {
-                t = generateRandomTile(numeroTileCourant++, t.getPosition());
-                tilesQueue.addTile(i, t);
+            switch (nbTile){
+                case 0:
+                    tilesQueue.ajouterLigneVide(i);
+                    break;
+                case 1:
+                    t = generateRandomTile(numeroTileCourant++);
+                    tilesQueue.addTile(i, t);
+                    break;
+                case 2:
+                    t = generateRandomTile(numeroTileCourant++);
+                    tilesQueue.addTile(i, t);
+                    t = generateRandomTile(numeroTileCourant++, t.getPosition());
+                    tilesQueue.addTile(i, t);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -133,19 +140,17 @@ public class TilesStartActivity extends Activity {
     }
 
     public static int nbTileRandom(int niveau) {
-        if (niveau == NIVEAU_FACILE)
+        switch (niveau)
         {
-            return (int)Math.round(Math.random());
+            case NIVEAU_FACILE :
+                return (int)Math.round(Math.random());
+            case NIVEAU_NORMAL :
+                return 1;
+            case NIVEAU_DIFFICILE :
+                return (int)Math.round(Math.random() * 1.5 + 0.5);
+            default:
+                return 0;
         }
-        else if (niveau == NIVEAU_NORMAL)
-        {
-            return 1;
-        }
-        else if (niveau == NIVEAU_DIFFICILE)
-        {
-            return (int)Math.round(Math.random() * 1.5 + 0.5);
-        }
-        return 0;
     }
 
     //nom de fonction à changer
@@ -161,7 +166,24 @@ public class TilesStartActivity extends Activity {
 
             int nbTile = nbTileRandom(niveau);
             Tile t = null;
-            if (nbTile == 1 || nbTile == 2)
+            switch (nbTile){
+                case 0:
+                    tilesQueue.ajouterLigneVide(NB_TILES_HAUTEUR + 1);
+                    break;
+                case 1:
+                    t = generateRandomTile(numeroTileCourant++);
+                    tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
+                    break;
+                case 2:
+                    t = generateRandomTile(numeroTileCourant++);
+                    tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
+                    t = generateRandomTile(numeroTileCourant++, t.getPosition());
+                    tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
+                    break;
+                default:
+                    break;
+            }
+            /*if (nbTile == 1 || nbTile == 2)
             {
                 t = generateRandomTile(numeroTileCourant++);
                 tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
@@ -170,7 +192,7 @@ public class TilesStartActivity extends Activity {
             {
                 t = generateRandomTile(numeroTileCourant++, t.getPosition());
                 tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
-            }
+            }*/
         }
 
         tilesView.setDecalage(deltaT, periodeDeDefilement);
