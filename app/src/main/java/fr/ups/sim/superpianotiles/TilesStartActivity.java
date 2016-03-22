@@ -37,6 +37,8 @@ public class TilesStartActivity extends Activity {
     private long tempsDebut;
     private long tempsCourant;
 
+    private boolean aCommence = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,14 +117,40 @@ public class TilesStartActivity extends Activity {
      */
     private boolean onTouchEventHandler (MotionEvent evt){
         //Log.i("TilesView", "Touch event handled");
-        tempsCourant = new Date().getTime();
-        tempsDebut = tempsCourant;
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                fonction();
+        if (aCommence) {
+            evt.getX();
+            if (tilesQueue != null)
+            {
+                for (int hauteur = 0 ; hauteur<TilesStartActivity.NB_TILES_HAUTEUR+1 ; ++hauteur)
+                {
+                    int largeurTile = tilesView.getContentWidth()/TilesStartActivity.NB_TILES_LARGEUR;
+                    int hauteurTile = tilesView.getContentHeight()/TilesStartActivity.NB_TILES_HAUTEUR;
+                    Tile[] tiles = tilesQueue.getTiles(hauteur);
+                    if (tiles != null)
+                    {
+                        for (Tile tile : tiles) {
+                            int left = tile.getPosition() * largeurTile;
+                            int top = tilesView.getDecalage() + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
+                            int right = left + largeurTile;
+                            int bottom = top + hauteurTile;
+                            if (evt.getX() > left && evt.getX() < right
+                                    && evt.getY() > top && evt.getY() < bottom)
+                                tile.setClicked(true);
+                        }
+                    }
+                }
             }
-        }, new Date(), (int)periodeDeRafraichissement);
+        } else {
+            aCommence = true;
+            tempsCourant = new Date().getTime();
+            tempsDebut = tempsCourant;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    fonction();
+                }
+            }, new Date(), (int) periodeDeRafraichissement);
+        }
         return true;
     }
 
