@@ -26,6 +26,7 @@ public class TilesStartActivity extends Activity {
     private Timer timer = new Timer();
     private TilesQueue tilesQueue;
     private int niveau;
+    private int numeroTileCourant = 1;
 
     private double frequenceDeDefilement = 1.0; //(en Hz)
     private double periodeDeDefilement = 1000/frequenceDeDefilement; //(en milli-secondes)
@@ -53,19 +54,19 @@ public class TilesStartActivity extends Activity {
         tilesQueue = new TilesQueue();
         tilesView.setTilesQueue(tilesQueue);
 
-        Tile t = generateRandomTile();
+        Tile t = generateRandomTile(numeroTileCourant++);
         tilesQueue.addTile(0, t);
         for (int i = 1 ; i<NB_TILES_HAUTEUR+2 ; ++i)
         {
             int nbTile = nbTileRandom(niveau);
             if (nbTile == 1 || nbTile == 2)
             {
-                t = generateRandomTile();
+                t = generateRandomTile(numeroTileCourant++);
                 tilesQueue.addTile(i, t);
             }
             if (nbTile == 2)
             {
-                t = generateRandomTile(t.getPosition());
+                t = generateRandomTile(numeroTileCourant++, t.getPosition());
                 tilesQueue.addTile(i, t);
             }
         }
@@ -118,17 +119,17 @@ public class TilesStartActivity extends Activity {
         return true;
     }
 
-    public static Tile generateRandomTile() {
-        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5));
+    public static Tile generateRandomTile(int numeroTile) {
+        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5), numeroTile);
     }
 
-    public static Tile generateRandomTile(int positionInterdite) {
+    public static Tile generateRandomTile(int numeroTile, int positionInterdite) {
         int pos;
         do
         {
             pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
         } while (pos == positionInterdite);
-        return new Tile(pos);
+        return new Tile(pos, numeroTile);
     }
 
     public static int nbTileRandom(int niveau) {
@@ -151,7 +152,7 @@ public class TilesStartActivity extends Activity {
     public void fonction() {
         tempsCourant = new Date().getTime();
         double deltaT = (double) (tempsCourant - tempsDebut);
-        System.out.println(deltaT);
+        //System.out.println(deltaT);
         if (deltaT >= periodeDeDefilement)
         {
             tempsDebut += periodeDeDefilement;
@@ -162,12 +163,12 @@ public class TilesStartActivity extends Activity {
             Tile t = null;
             if (nbTile == 1 || nbTile == 2)
             {
-                t = generateRandomTile();
+                t = generateRandomTile(numeroTileCourant++);
                 tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
             }
             if (nbTile == 2)
             {
-                t = generateRandomTile(t.getPosition());
+                t = generateRandomTile(numeroTileCourant++, t.getPosition());
                 tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
             }
         }

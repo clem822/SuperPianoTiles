@@ -113,7 +113,13 @@ public class TilesView extends View {
         int right = left + largeurTile;
         int bottom = top + hauteurTile;
 
-        canvas.drawRoundRect(new RectF(left, top, right, bottom), 2, 2, pTile);
+        RectF rect = new RectF(left, top, right, bottom);
+        canvas.drawRoundRect(rect, 2, 2, pTile);
+
+        Rect r = new Rect();
+        String numero = Integer.toString(tile.getNumero());
+        pText.getTextBounds(numero, 0, numero.length(), r);
+        canvas.drawText(numero, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);
     }
 
     public void addTile(String order, Tile tile, int hauteur, Canvas canvas) {
