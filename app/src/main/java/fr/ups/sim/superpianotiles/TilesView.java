@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Date;
 import java.util.NavigableSet;
 
 /**
@@ -69,6 +70,7 @@ public class TilesView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        //long time = new Date().getTime();
         super.onDraw(canvas);
 
         int paddingLeft = getPaddingLeft();
@@ -102,6 +104,7 @@ public class TilesView extends View {
                     paddingLeft + contentWidth, paddingTop + contentHeight);
             mExampleDrawable.draw(canvas);
         }
+        //System.out.println(new Date().getTime() - time);
     }
 
     public void addTile(Tile tile, int hauteur, Canvas canvas) {
