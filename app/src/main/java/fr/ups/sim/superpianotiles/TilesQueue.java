@@ -54,7 +54,7 @@ public class TilesQueue {
         }
     }
 
-    public Tile[] getTiles(int hauteur) {
+    public NavigableSet<Tile> getTiles(int hauteur) {
         //System.out.println("hauteur = " + hauteur);
         //System.out.println("Level = " + this);
         if (hauteur >= 0 && hauteur < hauteurRestante)
@@ -86,8 +86,7 @@ public class TilesQueue {
         }
     }
 
-    public void ajouterLigneVide(int hauteur)
-    {
+    public void ajouterLigneVide(int hauteur) {
         if (hauteur >= 0)
         {
             if (bas == null)
@@ -105,12 +104,10 @@ public class TilesQueue {
         String str = new String();
         if (haut != null) {
             Noeud courant = haut;
-            /*str += courant.toString();
-            courant = courant.getPrecedent();*/
             while (courant != bas)
             {
                 //System.out.println(courant);
-                str += courant.toString();  //il y a un NullPointerException de temps en temps ici !!!!
+                str += courant.toString();
                 courant = courant.getPrecedent();
                 str += "\n";
             }
@@ -118,4 +115,5 @@ public class TilesQueue {
         }
         return str;
     }
+
 }

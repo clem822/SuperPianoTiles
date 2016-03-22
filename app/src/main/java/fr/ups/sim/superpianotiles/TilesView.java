@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.NavigableSet;
+
 /**
  * Custom view that displays tiles
  */
@@ -84,7 +86,7 @@ public class TilesView extends View {
         {
             for (int hauteur = 0 ; hauteur<TilesStartActivity.NB_TILES_HAUTEUR+1 ; ++hauteur)
             {
-                Tile[] tiles = tilesQueue.getTiles(hauteur);
+                NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
                 if (tiles != null)
                 {
                     for (Tile tile : tiles) {
