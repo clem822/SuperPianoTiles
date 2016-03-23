@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.NavigableSet;
@@ -180,23 +181,28 @@ public class TilesStartActivity extends Activity {
             deltaT -= periodeDeDefilement;
 
             // Verifier que toutes les touches soient pressees
-            if (!verificationIsClicked())
+            if (!verificationIsClicked()) {
                 gestionPerte();
-
-            tilesQueue.supprimerLigneBasse();
-
-            int nbTile = nbTileRandom(niveau);
-            int pos = 0;
-            if (nbTile == 1 || nbTile == 2)
-            {
-                pos = generateRandomPosition();
-                tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
+                deltaT = 0;
             }
-            if (nbTile == 2)
+            else
             {
-                pos = generateRandomPosition(pos);
-                tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
+                tilesQueue.supprimerLigneBasse();
+
+                int nbTile = nbTileRandom(niveau);
+                int pos = 0;
+                if (nbTile == 1 || nbTile == 2)
+                {
+                    pos = generateRandomPosition();
+                    tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
+                }
+                if (nbTile == 2)
+                {
+                    pos = generateRandomPosition(pos);
+                    tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
+                }
             }
+
         }
 
         tilesView.setScore(score);
@@ -205,17 +211,22 @@ public class TilesStartActivity extends Activity {
     }
 
     public boolean verificationIsClicked() {
-        boolean isClicked = true;
+        //boolean isClicked = true;
         Tile[] tiles = tilesQueue.getTiles(0);
         
         if(tiles != null) {
             for(Tile tile : tiles){
-                if (tile.isTrueTile())
+                if (tile.isTrueTile() && !tile.isClicked())
                 {
-                    isClicked &= tile.isClicked();
+                    //juste pour l'affichage de la tuile en rouge (peut etre pas le meilleure solution mais ça rend plutôt bien)
+                    tile.setTrueTile(false);
+                    tile.setClicked();
+                    return false;
+                    //isClicked &= tile.isClicked();
                 }
             }
-            return isClicked;
+            return true;
+            //return isClicked;
         }
         return false;
     }
@@ -228,6 +239,12 @@ public class TilesStartActivity extends Activity {
         // interruption du timer
         timer.cancel();
         timer.purge();
+        //Enlever ça !
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getBaseContext(), "Dans le cul t'as perdu !", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }
