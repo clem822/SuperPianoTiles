@@ -10,12 +10,11 @@ import java.util.TreeSet;
 public class Noeud {
     private Noeud suivant;
     private Noeud precedent;
-    private NavigableSet<Tile> tiles;
+    private NavigableSet<Tile> tiles = new TreeSet<>();
 
     public Noeud() {
         suivant = null;
         precedent = null;
-        tiles = new TreeSet<>();
     }
 
     public void addTile(Tile t)
@@ -41,6 +40,10 @@ public class Noeud {
 
     public NavigableSet<Tile> getTiles() {
         return tiles;
+    }
+
+    public void supprimerTiles() {
+        tiles = new TreeSet<>();
     }
 
     @Override

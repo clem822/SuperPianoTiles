@@ -55,30 +55,24 @@ public class TilesStartActivity extends Activity {
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
 
-        tilesQueue = new TilesQueue();
+        //tilesQueue = new TilesQueue();
+        tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1);
         tilesView.setTilesQueue(tilesQueue);
 
         Tile t = generateRandomTile();
         tilesQueue.addTile(0, t);
-        for (int i = 1 ; i<NB_TILES_HAUTEUR+2 ; ++i)
+        for (int i = 1 ; i<NB_TILES_HAUTEUR+1 ; ++i)
         {
             int nbTile = nbTileRandom(niveau);
-            switch (nbTile){
-                case 0:
-                    tilesQueue.ajouterLigneVide(i);
-                    break;
-                case 1:
-                    t = generateRandomTile();
-                    tilesQueue.addTile(i, t);
-                    break;
-                case 2:
-                    t = generateRandomTile();
-                    tilesQueue.addTile(i, t);
-                    t = generateRandomTile(t.getPosition());
-                    tilesQueue.addTile(i, t);
-                    break;
-                default:
-                    break;
+            if (nbTile == 1 || nbTile == 2)
+            {
+                t = generateRandomTile();
+                tilesQueue.addTile(i, t);
+            }
+            if (nbTile == 2)
+            {
+                t = generateRandomTile(t.getPosition());
+                tilesQueue.addTile(i, t);
             }
         }
 
@@ -187,22 +181,15 @@ public class TilesStartActivity extends Activity {
 
             int nbTile = nbTileRandom(niveau);
             Tile t = null;
-            switch (nbTile){
-                case 0:
-                    tilesQueue.ajouterLigneVide(NB_TILES_HAUTEUR + 1);
-                    break;
-                case 1:
-                    t = generateRandomTile();
-                    tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
-                    break;
-                case 2:
-                    t = generateRandomTile();
-                    tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
-                    t = generateRandomTile(t.getPosition());
-                    tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
-                    break;
-                default:
-                    break;
+            if (nbTile == 1 || nbTile == 2)
+            {
+                t = generateRandomTile();
+                tilesQueue.addTile(NB_TILES_HAUTEUR, t);
+            }
+            if (nbTile == 2)
+            {
+                t = generateRandomTile(t.getPosition());
+                tilesQueue.addTile(NB_TILES_HAUTEUR, t);
             }
         }
 
