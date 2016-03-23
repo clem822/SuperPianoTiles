@@ -2,11 +2,14 @@ package fr.ups.sim.superpianotiles;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * Created by clem3 on 21/03/2016.
@@ -16,6 +19,9 @@ public class MenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        //SharedPreference permet de stocker les donnees comme les meilleurs scores
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Button boutonFacile = (Button) findViewById(R.id.buttonFacile);
         boutonFacile.setOnClickListener(new View.OnClickListener() {
@@ -27,6 +33,10 @@ public class MenuActivity extends Activity {
             }
         });
 
+        //score du niveau facile (sera à 0 si pas encore de meilleur score)
+        TextView scoreFacile = (TextView) findViewById(R.id.scoreFacile);
+        scoreFacile.setText("meilleur score : " + Integer.toString(preferences.getInt("facile", 0)));
+
         Button boutonNormal = (Button) findViewById(R.id.buttonNormal);
         boutonNormal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +47,10 @@ public class MenuActivity extends Activity {
             }
         });
 
+        //score du niveau normal (sera à 0 si pas encore de meilleur score)
+        TextView scoreNormal = (TextView) findViewById(R.id.scoreNormal);
+        scoreNormal.setText("meilleur score : " + Integer.toString(preferences.getInt("normal", 0)));
+
         Button boutonDifficile = (Button) findViewById(R.id.buttonDifficile);
         boutonDifficile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +60,10 @@ public class MenuActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        //score du difficile facile (sera à 0 si pas encore de meilleur score)
+        TextView scoreDifficile = (TextView) findViewById(R.id.scoreDifficile);
+        scoreDifficile.setText("meilleur score : " + Integer.toString(preferences.getInt("Difficile", 0)));
     }
 
     @Override
