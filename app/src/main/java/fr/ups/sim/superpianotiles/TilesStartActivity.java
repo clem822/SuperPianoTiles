@@ -33,7 +33,7 @@ public class TilesStartActivity extends Activity {
     private double frequenceDeDefilement = 1.0; //(en Hz)
     private double periodeDeDefilement = 1000/frequenceDeDefilement; //(en milli-secondes)
 
-    private double frequenceDeRafraichissement = 50; //(en Hz)
+    private double frequenceDeRafraichissement = 200; //(en Hz)
     private double periodeDeRafraichissement = 1000/frequenceDeRafraichissement; //(en milli-secondes)
 
     private long tempsDebut;
@@ -120,7 +120,6 @@ public class TilesStartActivity extends Activity {
      */
     private boolean onTouchEventHandler (MotionEvent evt){
         if (aCommence) {
-            evt.getX();
             if (tilesQueue != null)
             {
                 for (int hauteur = 0 ; hauteur < NB_TILES_HAUTEUR+1 ; hauteur++)
@@ -146,6 +145,7 @@ public class TilesStartActivity extends Activity {
             aCommence = true;
             tempsCourant = new Date().getTime();
             tempsDebut = tempsCourant;
+            System.out.println((int)periodeDeRafraichissement);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -157,7 +157,7 @@ public class TilesStartActivity extends Activity {
     }
 
     public static Tile generateRandomTile(int numeroTile) {
-        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5), numeroTile);
+        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5)/*, numeroTile*/);
     }
 
     public static Tile generateRandomTile(int numeroTile, int positionInterdite) {
@@ -166,7 +166,7 @@ public class TilesStartActivity extends Activity {
         {
             pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
         } while (pos == positionInterdite);
-        return new Tile(pos, numeroTile);
+        return new Tile(pos/*, numeroTile*/);
     }
 
     public static int nbTileRandom(int niveau) {

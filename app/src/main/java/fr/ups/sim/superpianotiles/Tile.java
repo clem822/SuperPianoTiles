@@ -10,9 +10,9 @@ public class Tile implements Comparable<Tile>{
     //private int duree;(4 cases)
 
 
-    public Tile(int position, int numero) {
+    public Tile(int position/*, int numero*/) {
         this.position = position;
-        this.numero = numero;
+        //this.numero = numero;
     }
 
     public int getPosition() {
@@ -31,9 +31,9 @@ public class Tile implements Comparable<Tile>{
         return clicked;
     }
 
-    public int getNumero() {
+    /*public int getNumero() {
         return numero;
-    }
+    }*/
 
     @Override
     public int compareTo(Tile another) {

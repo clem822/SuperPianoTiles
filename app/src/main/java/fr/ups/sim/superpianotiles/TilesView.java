@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Date;
 import java.util.NavigableSet;
 
 /**
@@ -19,7 +20,7 @@ import java.util.NavigableSet;
 public class TilesView extends View {
 
     private int tileColor = Color.BLUE;
-    private int clickedTileColor = Color.RED;
+    private int clickedTileColor = Color.GRAY;
     private int textColor = Color.WHITE;
     private Drawable mExampleDrawable;
     private float textSize = 40;
@@ -69,6 +70,7 @@ public class TilesView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        long time = new Date().getTime();
         super.onDraw(canvas);
 
         int paddingLeft = getPaddingLeft();
@@ -105,6 +107,7 @@ public class TilesView extends View {
 
         dessinerQuadrillage(canvas);
 
+        System.out.println(new Date().getTime() - time);
     }
 
     /**
@@ -143,10 +146,10 @@ public class TilesView extends View {
         RectF rect = new RectF(left, top, right, bottom);
         canvas.drawRoundRect(rect, 2, 2, pTile);
 
-        Rect r = new Rect();
+        /*Rect r = new Rect();
         String numero = Integer.toString(tile.getNumero());
         pText.getTextBounds(numero, 0, numero.length(), r);
-        canvas.drawText(numero, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);
+        canvas.drawText(numero, rect.centerX() - (r.width() / 2), rect.centerY() + (r.height() / 2), pText);*/
     }
 
     public void setTilesQueue(TilesQueue tilesQueue)

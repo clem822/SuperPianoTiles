@@ -4,19 +4,19 @@
     android:layout_height="match_parent">
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Niveau Facile"
         android:id="@+id/buttonFacile" />
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Niveau Normal"
         android:id="@+id/buttonNormal" />
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Niveau Difficile"
         android:id="@+id/buttonDifficile" />
