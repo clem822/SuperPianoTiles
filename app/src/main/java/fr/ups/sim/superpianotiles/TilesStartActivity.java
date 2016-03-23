@@ -118,21 +118,20 @@ public class TilesStartActivity extends Activity {
      * ICI - Commentez le code
      */
     private boolean onTouchEventHandler (MotionEvent evt){
-        //Log.i("TilesView", "Touch event handled");
         if (aCommence) {
             evt.getX();
             if (tilesQueue != null)
             {
-                for (int hauteur = 0 ; hauteur < this.NB_TILES_HAUTEUR+1 ; hauteur++)
+                for (int hauteur = 0 ; hauteur < NB_TILES_HAUTEUR+1 ; hauteur++)
                 {
-                    int largeurTile = tilesView.getContentWidth()/TilesStartActivity.NB_TILES_LARGEUR;
-                    int hauteurTile = tilesView.getContentHeight()/TilesStartActivity.NB_TILES_HAUTEUR;
+                    int largeurTile = tilesView.getContentWidth()/NB_TILES_LARGEUR;
+                    int hauteurTile = tilesView.getContentHeight()/NB_TILES_HAUTEUR;
                     NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
                     if (tiles != null)
                     {
                         for (Tile tile : tiles) {
                             int left = tile.getPosition() * largeurTile;
-                            int top = tilesView.getDecalage() + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
+                            int top = tilesView.getDecalage() + (NB_TILES_HAUTEUR - 1 - hauteur) * hauteurTile;
                             int right = left + largeurTile;
                             int bottom = top + hauteurTile;
                             if (evt.getX() > left && evt.getX() < right

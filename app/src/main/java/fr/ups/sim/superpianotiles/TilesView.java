@@ -84,7 +84,7 @@ public class TilesView extends View {
 
         if (tilesQueue != null)
         {
-            for (int hauteur = 0 ; hauteur<TilesStartActivity.NB_TILES_HAUTEUR+1 ; ++hauteur)
+            for (int hauteur = 0 ; hauteur < TilesStartActivity.NB_TILES_HAUTEUR+1 ; ++hauteur)
             {
                 NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
                 if (tiles != null)
@@ -102,6 +102,21 @@ public class TilesView extends View {
                     paddingLeft + contentWidth, paddingTop + contentHeight);
             mExampleDrawable.draw(canvas);
         }
+
+        // Dessiner lignes verticales
+        Paint ligne = new Paint();
+        ligne.setColor(Color.BLACK);
+        for(int i = 1; i < TilesStartActivity.NB_TILES_LARGEUR; i++)
+            canvas.drawLine(i* largeurTile, getBottom(), i* largeurTile, getTop(), ligne);
+
+        // Dessiner lignes horizontales
+        for(int i = 0; i < TilesStartActivity.NB_TILES_HAUTEUR; i++)
+            canvas.drawLine(getLeft(),
+                    decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-i) * hauteurTile,
+                    getRight(),
+                    decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-i) * hauteurTile,
+                    ligne);
+
     }
 
     public void addTile(Tile tile, int hauteur, Canvas canvas) {
