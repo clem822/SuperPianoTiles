@@ -214,7 +214,23 @@ public class TilesStartActivity extends Activity {
             }
         }
 
-        tilesView.setDecalage(deltaT, periodeDeDefilement);
+        /*
+        int hauteurTile = tilesView.getContentHeight()/NB_TILES_HAUTEUR;
+        int ancienDecalage = tilesView.getDecalage();
+        int decalage = (int) (deltaT * hauteurTile / periodeDeDefilement);
+
+        if(ancienDecalage > decalage) {
+            NavigableSet<Tile> tiles = tilesQueue.getTiles(0);
+            if(tiles != null) {
+                for(Tile tile : tiles){
+                    System.out.println(tile.isClicked());
+                }
+            }
+        }
+        */
+
+        tilesView.setDecalage(deltaT,periodeDeDefilement);
+        tilesView.update();
     }
 
 }
