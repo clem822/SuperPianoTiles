@@ -121,7 +121,7 @@ public class TilesView extends View {
         pText.getTextBounds(scoreString, 0, scoreString.length(), r);
         pText.setColor(Color.RED);
         pText.setTextSize(60);
-        canvas.drawText(scoreString, contentWidth/2 - (r.width() / 2), 40 + r.height(), pText);
+        canvas.drawText(scoreString, contentWidth / 2 - (r.width() / 2), 40 + r.height(), pText);
     }
 
     /**
@@ -204,16 +204,44 @@ public class TilesView extends View {
     }
 
 
-    public int getContentWidth() {
-        int paddingLeft = getPaddingLeft();
-        int paddingRight = getPaddingRight();
-        return getWidth() - paddingLeft - paddingRight;
-    }
+    /**
+     * Renvoie la Tile sur laquelle l'utilisateur a clique
+     * @param X abscisse du point touche
+     * @param Y ordonnee du point touche
+     * @return Renvoie la Tile sur laquelle l'utilisateur a clique
+     * si il n'a clique sur aucune Tile renvoie null
+     */
+    public Tile getClickedTile (float X, float Y) {
 
-    public int getContentHeight() {
-        int paddingTop = getPaddingTop();
-        int paddingBottom = getPaddingBottom();
-        return getHeight() - paddingTop - paddingBottom;
+        if (tilesQueue != null) {
+
+            int largeurTile = contentWidth / TilesStartActivity.NB_TILES_LARGEUR;
+            int hauteurTile = contentHeight / TilesStartActivity.NB_TILES_HAUTEUR;
+
+            for (int hauteur = 0; hauteur < TilesStartActivity.NB_TILES_HAUTEUR + 1; hauteur++) {
+
+                NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
+
+                if (tiles != null) {
+
+                    for (Tile tile : tiles) {
+                        int left = tile.getPosition() * largeurTile;
+                        int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR - 1 - hauteur) * hauteurTile;
+                        int right = left + largeurTile;
+                        int bottom = top + hauteurTile;
+                        if (X > left && X < right
+                                && Y > top && Y < bottom)
+                            return tile;
+                    }
+
+                }
+
+            }
+
+        }
+
+        return null;
+
     }
 
     public void setScore(int score) {

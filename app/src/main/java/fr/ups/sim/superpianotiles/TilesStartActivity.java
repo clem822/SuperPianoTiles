@@ -119,27 +119,14 @@ public class TilesStartActivity extends Activity {
      */
     private boolean onTouchEventHandler (MotionEvent evt){
         if (aCommence) {
-            if (tilesQueue != null)
-            {
-                for (int hauteur = 0 ; hauteur < NB_TILES_HAUTEUR+1 ; hauteur++)
-                {
-                    int largeurTile = tilesView.getContentWidth()/NB_TILES_LARGEUR;
-                    int hauteurTile = tilesView.getContentHeight()/NB_TILES_HAUTEUR;
-                    NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
-                    if (tiles != null)
-                    {
-                        for (Tile tile : tiles) {
-                            int left = tile.getPosition() * largeurTile;
-                            int top = tilesView.getDecalage() + (NB_TILES_HAUTEUR - 1 - hauteur) * hauteurTile;
-                            int right = left + largeurTile;
-                            int bottom = top + hauteurTile;
-                            if (evt.getX() > left && evt.getX() < right
-                                    && evt.getY() > top && evt.getY() < bottom)
-                                tile.setClicked(true);
-                        }
-                    }
-                }
-            }
+            Tile t = tilesView.getClickedTile(evt.getX(), evt.getY());
+            if(t != null) {
+                boolean change = t.isClicked();
+                t.setClicked(true);
+                if (change != t.isClicked())
+                    score++;
+            } else
+                ;
         } else {
             aCommence = true;
             tempsCourant = new Date().getTime();
@@ -193,7 +180,7 @@ public class TilesStartActivity extends Activity {
             deltaT -= periodeDeDefilement;
 
             // Verifier que toutes les touches soient pressees
-            if (!verificationIsClicked(deltaT))
+            if (!verificationIsClicked())
                 gestionPerte();
 
             tilesQueue.supprimerLigneBasse();
@@ -219,23 +206,17 @@ public class TilesStartActivity extends Activity {
             }
         }
 
+        tilesView.setScore(score);
 
         tilesView.setDecalage(deltaT, periodeDeDefilement);
     }
 
-    public boolean verificationIsClicked(double deltaT) {
-        // Verifiaction
-        int hauteurTile = tilesView.getContentHeight()/NB_TILES_HAUTEUR;
-        int ancienDecalage = tilesView.getDecalage();
-        int decalage = (int) (deltaT * hauteurTile / periodeDeDefilement);
-
-        if(ancienDecalage > decalage) {
-            boolean isClicked = true;
-            NavigableSet<Tile> tiles = tilesQueue.getTiles(0);
-            if(tiles != null) {
-                for(Tile tile : tiles){
-                    isClicked &= tile.isClicked();
-                }
+    public boolean verificationIsClicked() {
+        boolean isClicked = true;
+        NavigableSet<Tile> tiles = tilesQueue.getTiles(0);
+        if(tiles != null) {
+            for(Tile tile : tiles){
+                isClicked &= tile.isClicked();
             }
             return isClicked;
         }
