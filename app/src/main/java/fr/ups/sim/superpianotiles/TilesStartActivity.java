@@ -244,8 +244,12 @@ public class TilesStartActivity extends Activity {
         return false;
     }
 
+    /**
+     * Gere le jeu en cas de perte
+     */
     public void gestionPerte() {
         perdu = true; // a voir si utilise finalement ?
+        // interruption du timer
         timer.cancel();
         timer.purge();
     }
