@@ -117,6 +117,7 @@ public class TilesView extends View {
                     getRight(),
                     decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-i) * hauteurTile,
                     ligne);
+
     }
 
     public void addTile(Tile tile, int hauteur, Canvas canvas) {
