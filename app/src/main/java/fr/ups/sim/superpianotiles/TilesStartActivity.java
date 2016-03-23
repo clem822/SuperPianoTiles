@@ -40,6 +40,7 @@ public class TilesStartActivity extends Activity {
     private long tempsCourant;
 
     private boolean aCommence = false;
+    private boolean perdu = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +192,11 @@ public class TilesStartActivity extends Activity {
         {
             tempsDebut += periodeDeDefilement;
             deltaT -= periodeDeDefilement;
+
+            // Verifier que toutes les touches soient pressees
+            if (!verificationIsClicked(deltaT))
+                gestionPerte();
+
             tilesQueue.supprimerLigneBasse();
 
             int nbTile = nbTileRandom(niveau);
@@ -214,23 +220,34 @@ public class TilesStartActivity extends Activity {
             }
         }
 
-        /*
+
+        tilesView.setDecalage(deltaT, periodeDeDefilement);
+        tilesView.update();
+    }
+
+    public boolean verificationIsClicked(double deltaT) {
+        // Verifiaction
         int hauteurTile = tilesView.getContentHeight()/NB_TILES_HAUTEUR;
         int ancienDecalage = tilesView.getDecalage();
         int decalage = (int) (deltaT * hauteurTile / periodeDeDefilement);
 
         if(ancienDecalage > decalage) {
+            boolean isClicked = true;
             NavigableSet<Tile> tiles = tilesQueue.getTiles(0);
             if(tiles != null) {
                 for(Tile tile : tiles){
-                    System.out.println(tile.isClicked());
+                    isClicked &= tile.isClicked();
                 }
             }
+            return isClicked;
         }
-        */
+        return false;
+    }
 
-        tilesView.setDecalage(deltaT,periodeDeDefilement);
-        tilesView.update();
+    public void gestionPerte() {
+        perdu = true; // a voir si utilise finalement ?
+        timer.cancel();
+        timer.purge();
     }
 
 }

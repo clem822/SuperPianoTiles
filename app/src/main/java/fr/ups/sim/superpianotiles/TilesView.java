@@ -103,6 +103,15 @@ public class TilesView extends View {
             mExampleDrawable.draw(canvas);
         }
 
+        dessinerQuadrillage(canvas);
+
+    }
+
+    /**
+     * Dessine le quadrillage
+     * @param canvas
+     */
+    public void dessinerQuadrillage(Canvas canvas){
         Paint ligne = new Paint();
         ligne.setColor(Color.BLACK);
 
