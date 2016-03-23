@@ -11,7 +11,6 @@ public class Noeud {
     private Noeud suivant;
     private Noeud precedent;
     private Tile[] tabTiles;
-    //private NavigableSet<Tile> tiles = new TreeSet<>();
 
     public Noeud(int nbTuiles) {
         suivant = null;

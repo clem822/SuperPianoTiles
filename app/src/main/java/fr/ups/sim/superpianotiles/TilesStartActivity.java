@@ -117,8 +117,14 @@ public class TilesStartActivity extends Activity {
             if(t != null) {
                 boolean change = t.isClicked();
                 t.setClicked(true);
-                if (t.isTrueTile() && change != t.isClicked())
-                    score++;
+                if (t.isTrueTile())
+                {
+                    if (change != t.isClicked())
+                        score++;
+                } else {
+                    gestionPerte();
+                }
+
             } else
                 ;
         } else {
