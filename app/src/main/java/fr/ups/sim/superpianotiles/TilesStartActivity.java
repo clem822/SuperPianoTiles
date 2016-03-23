@@ -201,6 +201,7 @@ public class TilesStartActivity extends Activity {
     public boolean verificationIsClicked() {
         boolean isClicked = true;
         NavigableSet<Tile> tiles = tilesQueue.getTiles(0);
+        
         if(tiles != null) {
             for(Tile tile : tiles){
                 isClicked &= tile.isClicked();
