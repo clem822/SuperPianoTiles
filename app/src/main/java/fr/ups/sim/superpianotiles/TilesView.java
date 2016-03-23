@@ -91,7 +91,7 @@ public class TilesView extends View {
         {
             for (int hauteur = 0 ; hauteur<TilesStartActivity.NB_TILES_HAUTEUR+1 ; ++hauteur)
             {
-                NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
+                Tile[] tiles = tilesQueue.getTiles(hauteur);
                 if (tiles != null)
                 {
                     for (Tile tile : tiles) {
@@ -147,18 +147,33 @@ public class TilesView extends View {
     }
 
     public void addTile(Tile tile, int hauteur, Canvas canvas) {
-        if (tile.isClicked())
-            pTile.setColor(clickedTileColor);
-        else
-            pTile.setColor(tileColor);
+        if (tile.isTrueTile())
+        {
+            if (tile.isClicked())
+                pTile.setColor(clickedTileColor);
+            else
+                pTile.setColor(tileColor);
 
-        int left = tile.getPosition() * largeurTile;
-        int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
-        int right = left + largeurTile;
-        int bottom = top + hauteurTile;
+            int left = tile.getPosition() * largeurTile;
+            int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
+            int right = left + largeurTile;
+            int bottom = top + hauteurTile;
 
-        RectF rect = new RectF(left, top, right, bottom);
-        canvas.drawRoundRect(rect, 2, 2, pTile);
+            RectF rect = new RectF(left, top, right, bottom);
+            canvas.drawRoundRect(rect, 2, 2, pTile);
+        }
+        else if (tile.isClicked())
+        {
+            pTile.setColor(Color.RED);
+            int left = tile.getPosition() * largeurTile;
+            int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR-1-hauteur) * hauteurTile;
+            int right = left + largeurTile;
+            int bottom = top + hauteurTile;
+
+            RectF rect = new RectF(left, top, right, bottom);
+            canvas.drawRoundRect(rect, 2, 2, pTile);
+        }
+
 
         /*Rect r = new Rect();
         String numero = Integer.toString(tile.getNumero());
@@ -220,7 +235,7 @@ public class TilesView extends View {
 
             for (int hauteur = 0; hauteur < TilesStartActivity.NB_TILES_HAUTEUR + 1; hauteur++) {
 
-                NavigableSet<Tile> tiles = tilesQueue.getTiles(hauteur);
+                Tile[] tiles = tilesQueue.getTiles(hauteur);
 
                 if (tiles != null) {
 

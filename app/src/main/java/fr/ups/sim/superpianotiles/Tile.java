@@ -3,14 +3,20 @@ package fr.ups.sim.superpianotiles;
 /**
  * Created by clem3 on 20/03/2016.
  */
-public class Tile implements Comparable<Tile>{
+public class Tile/* implements Comparable<Tile>*/{
     private int position;
     private boolean clicked = false;
+    private boolean trueTile;
     //private int duree;(4 cases)
 
 
     public Tile(int position) {
+        this(position, true);
+    }
+
+    public Tile(int position, boolean trueTile) {
         this.position = position;
+        this.trueTile = trueTile;
     }
 
     public int getPosition() {
@@ -29,13 +35,25 @@ public class Tile implements Comparable<Tile>{
         return clicked;
     }
 
-    @Override
+    public void setTrueTile(boolean trueTile) {
+        this.trueTile = trueTile;
+    }
+
+    public void setTrueTile() {
+        setTrueTile(true);
+    }
+
+    public boolean isTrueTile() {
+        return trueTile;
+    }
+/*    @Override
     public int compareTo(Tile another) {
         return ((Integer)position).compareTo((Integer)another.position);
-    }
+    }*/
 
     @Override
     public String toString() {
-        return ((Integer)position).toString();
+        if (trueTile) return Integer.toString(position);
+        else return "";
     }
 }

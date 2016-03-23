@@ -56,23 +56,23 @@ public class TilesStartActivity extends Activity {
         niveau = intent.getIntExtra("niveau", 0);
 
         //tilesQueue = new TilesQueue();
-        tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1);
+        tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1, NB_TILES_LARGEUR);
         tilesView.setTilesQueue(tilesQueue);
 
-        Tile t = generateRandomTile();
-        tilesQueue.addTile(0, t);
+        int pos = generateRandomPosition();
+        tilesQueue.addTile(0, pos);
         for (int i = 1 ; i<NB_TILES_HAUTEUR+1 ; ++i)
         {
             int nbTile = nbTileRandom(niveau);
             if (nbTile == 1 || nbTile == 2)
             {
-                t = generateRandomTile();
-                tilesQueue.addTile(i, t);
+                pos = generateRandomPosition();
+                tilesQueue.addTile(i, pos);
             }
             if (nbTile == 2)
             {
-                t = generateRandomTile(t.getPosition());
-                tilesQueue.addTile(i, t);
+                pos = generateRandomPosition(pos);
+                tilesQueue.addTile(i, pos);
             }
         }
 
@@ -117,7 +117,7 @@ public class TilesStartActivity extends Activity {
             if(t != null) {
                 boolean change = t.isClicked();
                 t.setClicked(true);
-                if (change != t.isClicked())
+                if (t.isTrueTile() && change != t.isClicked())
                     score++;
             } else
                 ;
@@ -136,17 +136,17 @@ public class TilesStartActivity extends Activity {
         return true;
     }
 
-    public static Tile generateRandomTile() {
-        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5));
+    public static int generateRandomPosition() {
+        return (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
     }
 
-    public static Tile generateRandomTile(int positionInterdite) {
+    public static int generateRandomPosition(int positionInterdite) {
         int pos;
         do
         {
             pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
         } while (pos == positionInterdite);
-        return new Tile(pos);
+        return pos;
     }
 
     public static int nbTileRandom(int niveau) {
@@ -180,16 +180,16 @@ public class TilesStartActivity extends Activity {
             tilesQueue.supprimerLigneBasse();
 
             int nbTile = nbTileRandom(niveau);
-            Tile t = null;
+            int pos = 0;
             if (nbTile == 1 || nbTile == 2)
             {
-                t = generateRandomTile();
-                tilesQueue.addTile(NB_TILES_HAUTEUR, t);
+                pos = generateRandomPosition();
+                tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
             }
             if (nbTile == 2)
             {
-                t = generateRandomTile(t.getPosition());
-                tilesQueue.addTile(NB_TILES_HAUTEUR, t);
+                pos = generateRandomPosition(pos);
+                tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
             }
         }
 
@@ -200,11 +200,14 @@ public class TilesStartActivity extends Activity {
 
     public boolean verificationIsClicked() {
         boolean isClicked = true;
-        NavigableSet<Tile> tiles = tilesQueue.getTiles(0);
+        Tile[] tiles = tilesQueue.getTiles(0);
         
         if(tiles != null) {
             for(Tile tile : tiles){
-                isClicked &= tile.isClicked();
+                if (tile.isTrueTile())
+                {
+                    isClicked &= tile.isClicked();
+                }
             }
             return isClicked;
         }

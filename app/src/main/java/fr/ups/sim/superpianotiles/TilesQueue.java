@@ -7,14 +7,21 @@ import java.util.NavigableSet;
  */
 public class TilesQueue {
     private Noeud bas;
-    private final int nbNoeuds;
+    private int nbNoeuds;
+    private int nbTileParNoeud;
 
-    public TilesQueue(int nbNoeuds) {
+    public TilesQueue(int nbNoeuds, int nbTileParNoeud) {
         if (nbNoeuds <= 0) {
-            System.out.println("Le nombre de noeuds doit être supérieur à 0. Il sera initialisé à 1.");
-            this.nbNoeuds = 1;
+            System.out.println("Le nombre de noeuds doit être supérieur à 0. Il sera initialisé à " + (TilesStartActivity.NB_TILES_HAUTEUR + 1) + ".");
+            this.nbNoeuds = TilesStartActivity.NB_TILES_HAUTEUR + 1;
         } else {
             this.nbNoeuds = nbNoeuds;
+        }
+        if (nbTileParNoeud < 0) {
+            System.out.println("Le nombre de tuile par noeud doit être positif. Il sera initialisé à " + TilesStartActivity.NB_TILES_LARGEUR + ".");
+            this.nbTileParNoeud = TilesStartActivity.NB_TILES_LARGEUR;
+        } else {
+            this.nbTileParNoeud = nbTileParNoeud;
         }
         for (int i = 0 ; i < nbNoeuds ; ++i)
         {
@@ -25,13 +32,13 @@ public class TilesQueue {
     private void ajouterNoeud() {
         if (bas == null)
         {
-            bas = new Noeud();
+            bas = new Noeud(nbTileParNoeud);
             bas.setPrecedent(bas);
             bas.setSuivant(bas);
         }
         else
         {
-            Noeud n = new Noeud();
+            Noeud n = new Noeud(nbTileParNoeud);
             bas.getPrecedent().setSuivant(n);
             n.setPrecedent(bas.getPrecedent());
             bas.setPrecedent(n);
@@ -50,14 +57,14 @@ public class TilesQueue {
         return courant;
     }
 
-    public void addTile(int hauteur, Tile t) {
+    public void addTile(int hauteur, int position) {
         if (hauteur >= 0 && hauteur < nbNoeuds)
         {
-            getNoeud(hauteur).addTile(t);
+            getNoeud(hauteur).addTile(position);
         }
     }
 
-    public NavigableSet<Tile> getTiles(int hauteur) {
+    public Tile[] getTiles(int hauteur) {
         if (hauteur >= 0 && hauteur < nbNoeuds)
         {
             return getNoeud(hauteur).getTiles();
@@ -73,7 +80,7 @@ public class TilesQueue {
 
     @Override
     public String toString() {
-        String str = new String();
+        String str = "";
         Noeud courant = bas;
         int hauteurCourante = 0;
         while (hauteurCourante < nbNoeuds)
