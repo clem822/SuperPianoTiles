@@ -1,12 +1,107 @@
 package fr.ups.sim.superpianotiles;
 
-import java.util.Arrays;
 import java.util.NavigableSet;
-import java.util.TreeSet;
 
 /**
  * Created by clem3 on 20/03/2016.
  */
+public class TilesQueue {
+    private Noeud bas;
+    private final int nbNoeuds;
+
+    public TilesQueue(int nbNoeuds) {
+        if (nbNoeuds <= 0) {
+            System.out.println("Le nombre de noeuds doit être supérieur à 0. Il sera initialisé à 1.");
+            this.nbNoeuds = 1;
+        } else {
+            this.nbNoeuds = nbNoeuds;
+        }
+        for (int i = 0 ; i < nbNoeuds ; ++i)
+        {
+            ajouterNoeud();
+        }
+    }
+
+    private void ajouterNoeud() {
+        if (bas == null)
+        {
+            bas = new Noeud();
+            bas.setPrecedent(bas);
+            bas.setSuivant(bas);
+        }
+        else
+        {
+            Noeud n = new Noeud();
+            bas.getPrecedent().setSuivant(n);
+            n.setPrecedent(bas.getPrecedent());
+            bas.setPrecedent(n);
+            n.setSuivant(bas);
+        }
+    }
+
+    private Noeud getNoeud(int index) {
+        Noeud courant = bas;
+        int hauteurCourante = 0;
+        while (hauteurCourante < index)
+        {
+            courant = courant.getSuivant();
+            ++hauteurCourante;
+        }
+        return courant;
+    }
+
+    public void addTile(int hauteur, Tile t) {
+        if (hauteur >= 0 && hauteur < nbNoeuds)
+        {
+            getNoeud(hauteur).addTile(t);
+        }
+    }
+
+    public NavigableSet<Tile> getTiles(int hauteur) {
+        if (hauteur >= 0 && hauteur < nbNoeuds)
+        {
+            return getNoeud(hauteur).getTiles();
+        }
+
+        return null;
+    }
+
+    public void supprimerLigneBasse() {
+        bas.supprimerTiles();
+        bas = bas.getSuivant();
+    }
+
+    @Override
+    public String toString() {
+        String str = new String();
+        Noeud courant = bas;
+        int hauteurCourante = 0;
+        while (hauteurCourante < nbNoeuds)
+        {
+            str += courant.toString();
+            str += "\n";
+            courant = courant.getSuivant();
+            ++hauteurCourante;
+        }
+        return str;
+    }
+
+}
+
+
+
+/*
+package fr.ups.sim.superpianotiles;
+
+import java.util.Arrays;
+import java.util.NavigableSet;
+import java.util.TreeSet;
+
+*/
+/**
+ * Created by clem3 on 20/03/2016.
+ *//*
+
 public class TilesQueue {
     private Noeud bas;
     private Noeud haut;
@@ -117,3 +212,4 @@ public class TilesQueue {
     }
 
 }
+*/
