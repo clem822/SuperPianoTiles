@@ -27,8 +27,7 @@ public class TilesStartActivity extends Activity {
     private Timer timer = new Timer();
     private TilesQueue tilesQueue;
     private int niveau;
-    //pas forcément utile d'afficher le numéro si on affiche en haut
-    private int numeroTileCourant = 1;
+    private int score = 0;
 
     private double frequenceDeDefilement = 1.0; //(en Hz)
     private double periodeDeDefilement = 1000/frequenceDeDefilement; //(en milli-secondes)
@@ -59,7 +58,7 @@ public class TilesStartActivity extends Activity {
         tilesQueue = new TilesQueue();
         tilesView.setTilesQueue(tilesQueue);
 
-        Tile t = generateRandomTile(numeroTileCourant++);
+        Tile t = generateRandomTile();
         tilesQueue.addTile(0, t);
         for (int i = 1 ; i<NB_TILES_HAUTEUR+2 ; ++i)
         {
@@ -69,13 +68,13 @@ public class TilesStartActivity extends Activity {
                     tilesQueue.ajouterLigneVide(i);
                     break;
                 case 1:
-                    t = generateRandomTile(numeroTileCourant++);
+                    t = generateRandomTile();
                     tilesQueue.addTile(i, t);
                     break;
                 case 2:
-                    t = generateRandomTile(numeroTileCourant++);
+                    t = generateRandomTile();
                     tilesQueue.addTile(i, t);
-                    t = generateRandomTile(numeroTileCourant++, t.getPosition());
+                    t = generateRandomTile(t.getPosition());
                     tilesQueue.addTile(i, t);
                     break;
                 default:
@@ -156,17 +155,17 @@ public class TilesStartActivity extends Activity {
         return true;
     }
 
-    public static Tile generateRandomTile(int numeroTile) {
-        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5)/*, numeroTile*/);
+    public static Tile generateRandomTile() {
+        return new Tile((int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5));
     }
 
-    public static Tile generateRandomTile(int numeroTile, int positionInterdite) {
+    public static Tile generateRandomTile(int positionInterdite) {
         int pos;
         do
         {
             pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
         } while (pos == positionInterdite);
-        return new Tile(pos/*, numeroTile*/);
+        return new Tile(pos);
     }
 
     public static int nbTileRandom(int niveau) {
@@ -206,13 +205,13 @@ public class TilesStartActivity extends Activity {
                     tilesQueue.ajouterLigneVide(NB_TILES_HAUTEUR + 1);
                     break;
                 case 1:
-                    t = generateRandomTile(numeroTileCourant++);
+                    t = generateRandomTile();
                     tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
                     break;
                 case 2:
-                    t = generateRandomTile(numeroTileCourant++);
+                    t = generateRandomTile();
                     tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
-                    t = generateRandomTile(numeroTileCourant++, t.getPosition());
+                    t = generateRandomTile(t.getPosition());
                     tilesQueue.addTile(NB_TILES_HAUTEUR + 1, t);
                     break;
                 default:
@@ -222,7 +221,6 @@ public class TilesStartActivity extends Activity {
 
 
         tilesView.setDecalage(deltaT, periodeDeDefilement);
-        tilesView.update();
     }
 
     public boolean verificationIsClicked(double deltaT) {

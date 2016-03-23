@@ -6,13 +6,11 @@ package fr.ups.sim.superpianotiles;
 public class Tile implements Comparable<Tile>{
     private int position;
     private boolean clicked = false;
-    private int numero;
     //private int duree;(4 cases)
 
 
-    public Tile(int position/*, int numero*/) {
+    public Tile(int position) {
         this.position = position;
-        //this.numero = numero;
     }
 
     public int getPosition() {
@@ -30,10 +28,6 @@ public class Tile implements Comparable<Tile>{
     public boolean isClicked() {
         return clicked;
     }
-
-    /*public int getNumero() {
-        return numero;
-    }*/
 
     @Override
     public int compareTo(Tile another) {

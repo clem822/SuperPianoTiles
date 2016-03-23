@@ -30,8 +30,12 @@ public class TilesView extends View {
     private int largeurTile;
     private int hauteurTile;
 
-    TilesQueue tilesQueue;
+    private int contentWidth;
+    private int contentHeight;
+
+    private TilesQueue tilesQueue;
     private int decalage = 0;
+    private int score = 0;
 
 
     public TilesView(Context context) {
@@ -60,7 +64,6 @@ public class TilesView extends View {
                     R.styleable.TilesView_exampleDrawable);
             mExampleDrawable.setCallback(this);
         }
-
         a.recycle();
 
         pText.setTextSize(textSize);
@@ -78,8 +81,8 @@ public class TilesView extends View {
         int paddingRight = getPaddingRight();
         int paddingBottom = getPaddingBottom();
 
-        int contentWidth = getWidth() - paddingLeft - paddingRight;
-        int contentHeight = getHeight() - paddingTop - paddingBottom;
+        contentWidth = getWidth() - paddingLeft - paddingRight;
+        contentHeight = getHeight() - paddingTop - paddingBottom;
 
         largeurTile = contentWidth/TilesStartActivity.NB_TILES_LARGEUR;
         hauteurTile = contentHeight/TilesStartActivity.NB_TILES_HAUTEUR;
@@ -98,6 +101,8 @@ public class TilesView extends View {
             }
         }
 
+        afficherScore(canvas);
+
         // Draw the example drawable on top of the text.
         if (mExampleDrawable != null) {
             mExampleDrawable.setBounds(paddingLeft, paddingTop,
@@ -108,6 +113,15 @@ public class TilesView extends View {
         dessinerQuadrillage(canvas);
 
         System.out.println(new Date().getTime() - time);
+    }
+
+    private void afficherScore(Canvas canvas) {
+        Rect r = new Rect();
+        String scoreString = Integer.toString(score);
+        pText.getTextBounds(scoreString, 0, scoreString.length(), r);
+        pText.setColor(Color.RED);
+        pText.setTextSize(60);
+        canvas.drawText(scoreString, contentWidth/2 - (r.width() / 2), 40 + r.height(), pText);
     }
 
     /**
@@ -159,6 +173,7 @@ public class TilesView extends View {
 
     public void setDecalage(double deltaT, double periodeDeDefilement) {
         decalage = (int) (deltaT * hauteurTile / periodeDeDefilement);
+        update();
     }
 
     public void update() {
@@ -201,4 +216,8 @@ public class TilesView extends View {
         return getHeight() - paddingTop - paddingBottom;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+        update();
+    }
 }
