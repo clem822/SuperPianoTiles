@@ -216,7 +216,6 @@ public class TilesStartActivity extends Activity {
 
             // Verifier que toutes les touches soient pressees
             if (!verificationIsClicked()) {
-                traitementScore();
                 gestionPerte();
                 deltaT = 0;
             }
@@ -270,6 +269,7 @@ public class TilesStartActivity extends Activity {
      * Gere le jeu en cas de perte
      */
     public void gestionPerte() {
+        traitementScore();
         perdu = true; // a voir si utilise finalement ?
         // interruption du timer
         timer.cancel();
@@ -305,8 +305,8 @@ public class TilesStartActivity extends Activity {
                 }
                 break;
             case NIVEAU_DIFFICILE :
-                if(score>preferences.getInt("dificile",0)){
-                    edit.putInt("dificile",score);
+                if(score>preferences.getInt("difficile",0)){
+                    edit.putInt("difficile",score);
                     //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
                 }else{
                     // MESSAGE

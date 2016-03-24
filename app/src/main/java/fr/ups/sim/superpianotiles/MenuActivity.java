@@ -69,14 +69,16 @@ public class MenuActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, TilesStartActivity.class);
                 intent.putExtra("niveau", TilesStartActivity.NIVEAU_DIFFICILE);
-                System.out.println(preferences.getInt("couleur",0));
+                System.out.println(preferences.getInt("couleur", 0));
                 startActivity(intent);
+
             }
         });
 
         //score du difficile facile (sera à 0 si pas encore de meilleur score)
         scoreDifficile = (TextView) findViewById(R.id.scoreDifficile);
         scoreDifficile.setText("meilleur score : " + Integer.toString(preferences.getInt("difficile", 0)));
+
     }
 
     @Override
@@ -95,7 +97,6 @@ public class MenuActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            // ICI - A compléter pour déclencher l'ouverture de l'écran de paramétrage
             Intent intent = new Intent(MenuActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
