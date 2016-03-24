@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+
 import java.util.Date;
 import java.util.NavigableSet;
 
@@ -289,5 +290,10 @@ public class TilesView extends View {
     public void setScore(int score) {
         this.score = score;
         update();
+    }
+
+    /* Changer la couleur des tuiles */
+    public void setTileColor(int color){
+        this.tileColor=color;
     }
 }

@@ -2,6 +2,8 @@ package fr.ups.sim.superpianotiles;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class TilesStartActivity extends Activity {
 
@@ -40,6 +44,8 @@ public class TilesStartActivity extends Activity {
     private boolean aCommence = false;
     private boolean perdu = false;
 
+    private SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +54,12 @@ public class TilesStartActivity extends Activity {
         //System.out.println(periodeDeRafraichissement);
         //System.out.println(periodeDeDefilement);
 
+        //Recupere les preferences de l'utilisateur
+        preferences = getDefaultSharedPreferences(getApplicationContext());
+
         //ICI - Commentez le code
         tilesView = (TilesView) findViewById(R.id.view);
+        tilesView.setTileColor(preferences.getInt("couleur", Color.BLUE));
 
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
