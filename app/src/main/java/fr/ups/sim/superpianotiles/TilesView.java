@@ -259,6 +259,33 @@ public class TilesView extends View {
 
     }
 
+
+    /**
+     * Obtenir la hauteur sur laquelle Y se trouve
+     * @param Y ordonnee
+     * @return hauteur sur laquelle Y se trouve
+     * -1 en cas d'erreur
+     */
+    public int getHauteurClicked (float Y) {
+
+        if (tilesQueue != null) {
+
+            int hauteurTile = contentHeight / TilesStartActivity.NB_TILES_HAUTEUR;
+
+            for (int hauteur = 0; hauteur < TilesStartActivity.NB_TILES_HAUTEUR + 1; hauteur++) {
+
+                int top = decalage + (TilesStartActivity.NB_TILES_HAUTEUR - 1 - hauteur) * hauteurTile;
+                int bottom = top + hauteurTile;
+                if (Y > top && Y < bottom)
+                    return hauteur;
+
+            }
+
+        }
+
+        return -1;
+    }
+
     public void setScore(int score) {
         this.score = score;
         update();

@@ -115,19 +115,23 @@ public class TilesStartActivity extends Activity {
     private boolean onTouchEventHandler (MotionEvent evt){
         if (aCommence) {
             Tile t = tilesView.getClickedTile(evt.getX(), evt.getY());
-            if(t != null) {
-                boolean change = t.isClicked();
-                t.setClicked(true);
+            if (t != null) {
                 if (t.isTrueTile())
                 {
-                    if (change != t.isClicked())
-                        score++;
+                    
+                    if(premiereTile(evt.getY())) {
+                        boolean change = t.isClicked();
+                        t.setClicked(true);
+                        if (change != t.isClicked())
+                            score++;
+                    }
+
                 } else {
+                    t.setClicked(true);
                     gestionPerte();
                 }
+            }
 
-            } else
-                ;
         } else {
             aCommence = true;
             tempsCourant = new Date().getTime();
@@ -139,6 +143,22 @@ public class TilesStartActivity extends Activity {
                     fonction();
                 }
             }, new Date(), (int) periodeDeRafraichissement);
+        }
+        return true;
+    }
+
+    /*
+     * Verifier qu'il n'y ai aucune tile sur les lignes en dessous
+     * @param Y ordonnee
+     * @return true si aucune tile n'est en dessous
+     */
+    public boolean premiereTile(float Y) {
+        for(int hauteur = 0; hauteur <  tilesView.getHauteurClicked(Y); hauteur++) {
+            Tile[] tiles = tilesQueue.getTiles(hauteur);
+            for (Tile tile : tiles) {
+                if(tile.isTrueTile() && !tile.isClicked())
+                    return false;
+            }
         }
         return true;
     }
