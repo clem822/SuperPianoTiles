@@ -270,6 +270,7 @@ public class TilesStartActivity extends Activity {
      */
     public void gestionPerte() {
         traitementScore();
+
         perdu = true; // a voir si utilise finalement ?
         // interruption du timer
         timer.cancel();
