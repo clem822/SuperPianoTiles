@@ -113,12 +113,24 @@ public class TilesStartActivity extends Activity {
      * ICI - Commentez le code
      */
     private boolean onTouchEventHandler (MotionEvent evt){
-        if (aCommence) {
+        if (!aCommence) {
+            aCommence = true;
+            tempsCourant = new Date().getTime();
+            tempsDebut = tempsCourant;
+            System.out.println((int)periodeDeRafraichissement);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    fonction();
+                }
+            }, new Date(), (int) periodeDeRafraichissement);
+        }
+        if (evt.getAction() == MotionEvent.ACTION_DOWN){
             Tile t = tilesView.getClickedTile(evt.getX(), evt.getY());
             if (t != null) {
                 if (t.isTrueTile())
                 {
-                    
+
                     if(premiereTile(evt.getY())) {
                         boolean change = t.isClicked();
                         t.setClicked(true);
@@ -131,18 +143,6 @@ public class TilesStartActivity extends Activity {
                     gestionPerte();
                 }
             }
-
-        } else {
-            aCommence = true;
-            tempsCourant = new Date().getTime();
-            tempsDebut = tempsCourant;
-            System.out.println((int)periodeDeRafraichissement);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    fonction();
-                }
-            }, new Date(), (int) periodeDeRafraichissement);
         }
         return true;
     }
