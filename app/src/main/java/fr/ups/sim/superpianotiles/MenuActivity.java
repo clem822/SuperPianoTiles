@@ -76,7 +76,7 @@ public class MenuActivity extends Activity {
 
         //score du difficile facile (sera à 0 si pas encore de meilleur score)
         scoreDifficile = (TextView) findViewById(R.id.scoreDifficile);
-        scoreDifficile.setText("meilleur score : " + Integer.toString(preferences.getInt("Difficile", 0)));
+        scoreDifficile.setText("meilleur score : " + Integer.toString(preferences.getInt("difficile", 0)));
     }
 
     @Override

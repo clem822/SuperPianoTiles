@@ -32,7 +32,7 @@ public class TilesStartActivity extends Activity {
     private int niveau;
     private int score = 0;
 
-    private double frequenceDeDefilement = 1.0; //(en Hz)
+    private double frequenceDeDefilement = 2.0; //(en Hz)
     private double periodeDeDefilement = 1000/frequenceDeDefilement; //(en milli-secondes)
 
     private double frequenceDeRafraichissement = 200; //(en Hz)
@@ -216,6 +216,7 @@ public class TilesStartActivity extends Activity {
 
             // Verifier que toutes les touches soient pressees
             if (!verificationIsClicked()) {
+                traitementScore();
                 gestionPerte();
                 deltaT = 0;
             }
@@ -279,6 +280,41 @@ public class TilesStartActivity extends Activity {
                 Toast.makeText(getBaseContext(), "Dans le cul t'as perdu !", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void traitementScore()
+    {
+
+        preferences = getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = preferences.edit();
+        switch (niveau){
+            case NIVEAU_FACILE :
+                if(score>preferences.getInt("facile",0)){
+                    edit.putInt("facile",score);
+                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                }else{
+                    // MESSAGE
+                }
+                break;
+            case NIVEAU_NORMAL :
+                if(score>preferences.getInt("normal",0)){
+                    edit.putInt("normal",score);
+                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                }else{
+                    // MESSAGE
+                }
+                break;
+            case NIVEAU_DIFFICILE :
+                if(score>preferences.getInt("dificile",0)){
+                    edit.putInt("dificile",score);
+                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                }else{
+                    // MESSAGE
+                }
+                break;
+
+        }
+        edit.apply();
     }
 
 }
