@@ -81,7 +81,13 @@ public class TilesStartActivity extends Activity {
         tilesView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return onTouchEventHandler(event);
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_POINTER_DOWN: {
+                        return onTouchEventHandler(event);
+                    }
+                }
+                return true;
             }
         });
     }
@@ -125,23 +131,24 @@ public class TilesStartActivity extends Activity {
                 }
             }, new Date(), (int) periodeDeRafraichissement);
         }
-        if (evt.getAction() == MotionEvent.ACTION_DOWN){
-            Tile t = tilesView.getClickedTile(evt.getX(), evt.getY());
-            if (t != null) {
-                if (t.isTrueTile())
-                {
 
-                    if(premiereTile(evt.getY())) {
-                        boolean change = t.isClicked();
-                        t.setClicked(true);
-                        if (change != t.isClicked())
-                            score++;
-                    }
+        int pointerIndex = evt.getActionIndex();
 
-                } else {
+        Tile t = tilesView.getClickedTile(evt.getX(pointerIndex), evt.getY(pointerIndex));
+        if (t != null) {
+            if (t.isTrueTile())
+            {
+
+                if(premiereTile(evt.getY(pointerIndex))) {
+                    boolean change = t.isClicked();
                     t.setClicked(true);
-                    gestionPerte();
+                    if (change != t.isClicked())
+                        score++;
                 }
+
+            } else {
+                t.setClicked(true);
+                gestionPerte();
             }
         }
         return true;
