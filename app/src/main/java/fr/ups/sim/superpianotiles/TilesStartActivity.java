@@ -3,7 +3,6 @@ package fr.ups.sim.superpianotiles;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.Date;
-import java.util.NavigableSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -119,7 +117,10 @@ public class TilesStartActivity extends Activity {
      * ICI - Commentez le code
      */
     private boolean onTouchEventHandler (MotionEvent evt){
-        if (!aCommence) {
+        int pointerIndex = evt.getActionIndex();
+        Tile t = tilesView.getClickedTile(evt.getX(pointerIndex), evt.getY(pointerIndex));
+
+        if (!aCommence && t != null && t.isTrueTile() && premiereTile(evt.getY(pointerIndex))) {
             aCommence = true;
             tempsCourant = new Date().getTime();
             tempsDebut = tempsCourant;
@@ -127,15 +128,12 @@ public class TilesStartActivity extends Activity {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    fonction();
+                    timerHandler();
                 }
             }, new Date(), (int) periodeDeRafraichissement);
         }
 
-        int pointerIndex = evt.getActionIndex();
-
-        Tile t = tilesView.getClickedTile(evt.getX(pointerIndex), evt.getY(pointerIndex));
-        if (t != null) {
+        if (aCommence && t != null) {
             if (t.isTrueTile())
             {
 
@@ -197,8 +195,7 @@ public class TilesStartActivity extends Activity {
         }
     }
 
-    //nom de fonction à changer
-    public void fonction() {
+    public void timerHandler() {
         tempsCourant = new Date().getTime();
         double deltaT = (double) (tempsCourant - tempsDebut);
         //System.out.println(deltaT);
