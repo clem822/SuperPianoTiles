@@ -13,6 +13,15 @@ import android.widget.TextView;
 public class PopUpPerdu extends Activity {
 
     private int score;
+    private int meilleurScore;
+
+    private Intent intent;
+
+    private TextView scoreView;
+    private  TextView messageView;
+    private  TextView meilleurScoreView;
+
+    private String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +29,19 @@ public class PopUpPerdu extends Activity {
 
         setContentView(R.layout.popperdu);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         score = intent.getIntExtra("score", 0);
+        message = intent.getStringExtra("message");
+        meilleurScore = intent.getIntExtra("meilleurScore", 0);
 
-        TextView scoreView = (TextView) findViewById(R.id.score);
+        messageView = (TextView) findViewById(R.id.message);
+        messageView.setText(message);
+
+        scoreView = (TextView) findViewById(R.id.score);
         scoreView.setText("score : " + score);
+
+        meilleurScoreView = (TextView) findViewById(R.id.meilleurScore);
+        meilleurScoreView.setText("meilleur score : "+meilleurScore);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
