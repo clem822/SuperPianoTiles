@@ -1,7 +1,5 @@
 package fr.ups.sim.superpianotiles;
 
-import java.util.NavigableSet;
-
 /**
  * Created by clem3 on 20/03/2016.
  */
@@ -10,6 +8,12 @@ public class TilesQueue {
     private int nbNoeuds;
     private int nbTileParNoeud;
 
+    /**
+     * Initialise un nouvel objet TilesQueue qui contiendra "nbNoeuds" noeuds et "nbTileParNoeud"
+     * tuiles par noeud.
+     * @param nbNoeuds Nombre de noeds
+     * @param nbTileParNoeud Nombre de tuiles par noeud
+     */
     public TilesQueue(int nbNoeuds, int nbTileParNoeud) {
         if (nbNoeuds <= 0) {
             System.out.println("Le nombre de noeuds doit être supérieur à 0. Il sera initialisé à " + (TilesStartActivity.NB_TILES_HAUTEUR + 1) + ".");
@@ -29,6 +33,43 @@ public class TilesQueue {
         }
     }
 
+    /**
+     *
+     * @param hauteur
+     * @param position
+     */
+    public void addTile(int hauteur, int position) {
+        if (hauteur >= 0 && hauteur < nbNoeuds)
+        {
+            getNoeud(hauteur).addTile(position);
+        }
+    }
+
+    /**
+     *
+     * @param hauteur
+     * @return
+     */
+    public Tile[] getTiles(int hauteur) {
+        if (hauteur >= 0 && hauteur < nbNoeuds)
+        {
+            return getNoeud(hauteur).getTiles();
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     */
+    public void supprimerLigneBasse() {
+        bas.supprimerTiles();
+        bas = bas.getSuivant();
+    }
+
+    /**
+     *
+     */
     private void ajouterNoeud() {
         if (bas == null)
         {
@@ -46,6 +87,11 @@ public class TilesQueue {
         }
     }
 
+    /**
+     * Retourne le noeud d'undice "index"
+     * @param index Indice du noeud
+     * @return
+     */
     private Noeud getNoeud(int index) {
         Noeud courant = bas;
         int hauteurCourante = 0;
@@ -55,27 +101,6 @@ public class TilesQueue {
             ++hauteurCourante;
         }
         return courant;
-    }
-
-    public void addTile(int hauteur, int position) {
-        if (hauteur >= 0 && hauteur < nbNoeuds)
-        {
-            getNoeud(hauteur).addTile(position);
-        }
-    }
-
-    public Tile[] getTiles(int hauteur) {
-        if (hauteur >= 0 && hauteur < nbNoeuds)
-        {
-            return getNoeud(hauteur).getTiles();
-        }
-
-        return null;
-    }
-
-    public void supprimerLigneBasse() {
-        bas.supprimerTiles();
-        bas = bas.getSuivant();
     }
 
     @Override
@@ -94,129 +119,3 @@ public class TilesQueue {
     }
 
 }
-
-
-
-/*
-package fr.ups.sim.superpianotiles;
-
-import java.util.Arrays;
-import java.util.NavigableSet;
-import java.util.TreeSet;
-
-*/
-/**
- * Created by clem3 on 20/03/2016.
- *//*
-
-public class TilesQueue {
-    private Noeud bas;
-    private Noeud haut;
-    //nombre de noeuds entre haut et bas (compris)
-    private int hauteurRestante;
-
-    public void addTile(int hauteur, Tile t) {
-        if (hauteur >= 0)
-        {
-            if (bas == null)
-                ajouterNoeud();
-
-            while (hauteurRestante <= hauteur)
-            {
-                ajouterNoeud();
-            }
-
-            Noeud courant = haut;
-            int hauteurCourante = hauteurRestante-1;
-            while (hauteurCourante > hauteur)
-            {
-                courant = courant.getPrecedent();
-                --hauteurCourante;
-            }
-
-            courant.addTile(t);
-        }
-
-    }
-
-    private void ajouterNoeud() {
-        if (bas == null)
-        {
-            bas = new Noeud();
-            haut = bas;
-            hauteurRestante = 1;
-        }
-        else
-        {
-            Noeud n = new Noeud();
-            haut.setSuivant(n);
-            n.setPrecedent(haut);
-            haut = n;
-            ++hauteurRestante;
-        }
-    }
-
-    public NavigableSet<Tile> getTiles(int hauteur) {
-        //System.out.println("hauteur = " + hauteur);
-        //System.out.println("Level = " + this);
-        if (hauteur >= 0 && hauteur < hauteurRestante)
-        {
-            Noeud courant = bas;
-            int hauteurCourante = 0;
-            while (hauteurCourante < hauteur)
-            {
-                courant = courant.getSuivant();
-                ++hauteurCourante;
-            }
-
-            return courant.getTiles();
-        }
-
-        return null;
-    }
-
-    public void supprimerLigneBasse() {
-        if (bas != null)
-        {
-            //System.out.println(this);
-            bas = bas.getSuivant();
-            --hauteurRestante;
-            bas.setPrecedent(null);
-            if (hauteurRestante == 0)
-                haut = null;
-            //System.out.println(bas);
-        }
-    }
-
-    public void ajouterLigneVide(int hauteur) {
-        if (hauteur >= 0)
-        {
-            if (bas == null)
-                ajouterNoeud();
-
-            while (hauteurRestante <= hauteur)
-            {
-                ajouterNoeud();
-            }
-        }
-    }
-
-    @Override
-    public String toString() {
-        String str = new String();
-        if (haut != null) {
-            Noeud courant = haut;
-            while (courant != bas)
-            {
-                //System.out.println(courant);
-                str += courant.toString();
-                courant = courant.getPrecedent();
-                str += "\n";
-            }
-            str += courant.toString();
-        }
-        return str;
-    }
-
-}
-*/

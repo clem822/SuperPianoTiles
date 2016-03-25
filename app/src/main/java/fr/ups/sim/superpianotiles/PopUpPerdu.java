@@ -23,8 +23,8 @@ public class PopUpPerdu extends Activity {
         Intent intent = getIntent();
         score = intent.getIntExtra("score", 0);
 
-        TextView score = (TextView) findViewById(R.id.score);
-        score.setText("score : " + score);
+        TextView scoreView = (TextView) findViewById(R.id.score);
+        scoreView.setText("score : " + score);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);

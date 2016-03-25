@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.Date;
 import java.util.Timer;
@@ -149,49 +148,9 @@ public class TilesStartActivity extends Activity {
     }
 
     /*
-     * Verifier qu'il n'y ai aucune tile sur les lignes en dessous
-     * @param Y ordonnee
-     * @return true si aucune tile n'est en dessous
-     */
-    public boolean premiereTile(float Y) {
-        for(int hauteur = 0; hauteur <  tilesView.getHauteurClicked(Y); hauteur++) {
-            Tile[] tiles = tilesQueue.getTiles(hauteur);
-            for (Tile tile : tiles) {
-                if(tile.isTrueTile() && !tile.isClicked())
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    public static int generateRandomPosition() {
-        return (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
-    }
-
-    public static int generateRandomPosition(int positionInterdite) {
-        int pos;
-        do
-        {
-            pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
-        } while (pos == positionInterdite);
-        return pos;
-    }
-
-    public static int nbTileRandom(int niveau) {
-        switch (niveau)
-        {
-            case NIVEAU_FACILE :
-                return (int)Math.round(Math.random());
-            case NIVEAU_NORMAL :
-                return 1;
-            case NIVEAU_DIFFICILE :
-                return (int)Math.round(Math.random() * 1.5 + 0.5);
-            default:
-                return 0;
-        }
-    }
-
-    public void timerHandler() {
+    * Handler du timer. C'est ici qu'est géré le jeu.
+    */
+    private void timerHandler() {
         tempsCourant = new Date().getTime();
         double deltaT = (double) (tempsCourant - tempsDebut);
         if (deltaT >= periodeDeDefilement)
@@ -219,6 +178,85 @@ public class TilesStartActivity extends Activity {
         tilesView.setDecalage(deltaT, periodeDeDefilement);
     }
 
+    /*
+    * Génère une position horizontale pour une Tile.
+    * @return La position
+    */
+    private int generateRandomPosition() {
+        return (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
+    }
+
+    /*
+    * Génère une position horizontale pour une Tile en excluant la position passée en paramètre.
+    * @param positionInterdite La position à exclure
+    * @return La position
+    */
+    private int generateRandomPosition(int positionInterdite) {
+        int pos;
+        do
+        {
+            pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
+        } while (pos == positionInterdite);
+        return pos;
+    }
+
+    /*
+    * Génère un nombre de Tile aléatoire pour une ligne selon le niveau du jeu.
+    * @param niveau Niveau du jeu
+    */
+    private int nbTileRandom(int niveau) {
+        switch (niveau)
+        {
+            case NIVEAU_FACILE :
+                return (int)Math.round(Math.random());
+            case NIVEAU_NORMAL :
+                return 1;
+            case NIVEAU_DIFFICILE :
+                return (int)Math.round(Math.random() * 1.5 + 0.5);
+            default:
+                return 0;
+        }
+    }
+
+    /*
+    * Ajoute une ligne de tuile à la hauteur demandée, pour un niveau demandé.
+    * @param hauteur hauteur à laquelle la ligne sera ajoutée
+    * @param niveau niveau de difficulté
+    */
+    private void ajouterLigne(int hauteur, int niveau) {
+        int pos = 0;
+        int nbTile = nbTileRandom(niveau);
+        if (nbTile == NIVEAU_NORMAL || nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition();
+            tilesQueue.addTile(hauteur, pos);
+        }
+        if (nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition(pos);
+            tilesQueue.addTile(hauteur, pos);
+        }
+    }
+
+    /*
+     * Verifier qu'il n'y ai aucune tile sur les lignes en dessous (c'est pas plutôt en dessus ?)
+     * @param Y ordonnee
+     * @return true si aucune tile n'est en dessous
+     */
+    public boolean premiereTile(float Y) {
+        for(int hauteur = 0; hauteur <  tilesView.getHauteurClicked(Y); hauteur++) {
+            Tile[] tiles = tilesQueue.getTiles(hauteur);
+            for (Tile tile : tiles) {
+                if(tile.isTrueTile() && !tile.isClicked())
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    /*
+    * TODO
+    */
     public boolean verificationIsClicked() {
         Tile[] tiles = tilesQueue.getTiles(0);
         
@@ -237,26 +275,9 @@ public class TilesStartActivity extends Activity {
         return false;
     }
 
-    /**
-     * Gere le jeu en cas de perte
-     */
-    public void gestionPerte() {
-
-        perdu = true; // a voir si utilise finalement ?
-        // interruption du timer
-        timer.cancel();
-        timer.purge();
-        Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
-        intent.putExtra("score", score);
-        startActivity(intent);
-        //Enlever ça !
-/*        runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getBaseContext(), "Dans le cul t'as perdu !", Toast.LENGTH_LONG).show();
-            }
-        });*/
-    }
-
+    /*
+    * TODO
+    */
     public void traitementScore()
     {
 
@@ -292,19 +313,18 @@ public class TilesStartActivity extends Activity {
         edit.apply();
     }
 
-    public void ajouterLigne(int index, int niveau) {
-        int pos = 0;
-        int nbTile = nbTileRandom(niveau);
-        if (nbTile == NIVEAU_NORMAL || nbTile == NIVEAU_DIFFICILE)
-        {
-            pos = generateRandomPosition();
-            tilesQueue.addTile(index, pos);
-        }
-        if (nbTile == NIVEAU_DIFFICILE)
-        {
-            pos = generateRandomPosition(pos);
-            tilesQueue.addTile(index, pos);
-        }
+    /**
+     * Gere le jeu en cas de perte
+     */
+    public void gestionPerte() {
+
+        perdu = true; // a voir si utilise finalement ?
+        // interruption du timer
+        timer.cancel();
+        timer.purge();
+        Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
+        intent.putExtra("score", score);
+        startActivity(intent);
     }
 
 }

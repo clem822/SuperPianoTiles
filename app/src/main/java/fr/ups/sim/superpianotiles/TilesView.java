@@ -11,10 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
-
-import java.util.Date;
-import java.util.NavigableSet;
-
 /**
  * Custom view that displays tiles
  */
@@ -113,6 +109,10 @@ public class TilesView extends View {
         dessinerQuadrillage(canvas);
     }
 
+    /*
+    * Affiche le score sur le canvas
+    * @param canvas Canvas sur lequel afficher le score
+    */
     private void afficherScore(Canvas canvas) {
         Rect r = new Rect();
         String scoreString = Integer.toString(score);
@@ -124,9 +124,9 @@ public class TilesView extends View {
 
     /**
      * Dessine le quadrillage
-     * @param canvas
+     * @param canvas Canvas sur lequel afficher le quadrillage
      */
-    public void dessinerQuadrillage(Canvas canvas){
+    private void dessinerQuadrillage(Canvas canvas){
         Paint ligne = new Paint();
         ligne.setColor(Color.BLACK);
 
@@ -144,7 +144,13 @@ public class TilesView extends View {
 
     }
 
-    public void addTile(Tile tile, int hauteur, Canvas canvas) {
+    /*
+    * Affiche une tuile sur le canvas à la hauteur (décalée selon la valeur de decalage) demandée
+    * @param tils Tuile à afficher
+    * @param hauteur Hauteur de la tuile
+    * @param canvas Canvas sur lequel afficher la tuile
+    */
+    private void addTile(Tile tile, int hauteur, Canvas canvas) {
         if (tile.isTrueTile())
         {
             if (tile.isClicked())
@@ -173,41 +179,8 @@ public class TilesView extends View {
         }
     }
 
-    public void setTilesQueue(TilesQueue tilesQueue)
-    {
-        this.tilesQueue = tilesQueue;
-    }
-
-    public void setDecalage(double deltaT, double periodeDeDefilement) {
-        decalage = (int) (deltaT * hauteurTile / periodeDeDefilement);
-        update();
-    }
-
     public void update() {
         postInvalidate();
-    }
-
-    public int getDecalage(){
-        return decalage;
-    }
-
-       /**
-     * Gets the example drawable attribute value.
-     *
-     * @return The example drawable attribute value.
-     */
-    public Drawable getExampleDrawable() {
-        return mExampleDrawable;
-    }
-
-    /**
-     * Sets the view's example drawable attribute value. In the example view, this drawable is
-     * drawn above the text.
-     *
-     * @param exampleDrawable The example drawable attribute value to use.
-     */
-    public void setExampleDrawable(Drawable exampleDrawable) {
-        mExampleDrawable = exampleDrawable;
     }
 
 
@@ -278,12 +251,57 @@ public class TilesView extends View {
         return -1;
     }
 
+    /**
+     * Gets the example drawable attribute value.
+     *
+     * @return The example drawable attribute value.
+     */
+    public Drawable getExampleDrawable() {
+        return mExampleDrawable;
+    }
+
+    /**
+     * Sets the view's example drawable attribute value. In the example view, this drawable is
+     * drawn above the text.
+     *
+     * @param exampleDrawable The example drawable attribute value to use.
+     */
+    public void setExampleDrawable(Drawable exampleDrawable) {
+        mExampleDrawable = exampleDrawable;
+    }
+
+    /*
+    * Setter sur la file de tuiles
+    * @param tilesQueue
+    */
+    public void setTilesQueue(TilesQueue tilesQueue)
+    {
+        this.tilesQueue = tilesQueue;
+    }
+
+    /*
+    * Calcule le décalage des tuiles par rapport à la position de départ en fonction de la période
+    * de défilement et du temps passé depuis la position de départ.
+    * @param detaT Temps depuis la position de départ
+    * @param periodeDeDefilement Temps que met une tuile pour avancer d'une distance égale à sa hauteur
+    */
+    public void setDecalage(double deltaT, double periodeDeDefilement) {
+        decalage = (int) (deltaT * hauteurTile / periodeDeDefilement);
+        update();
+    }
+
+    /*
+    * Setter sur le score courant
+    * @param score
+    */
     public void setScore(int score) {
         this.score = score;
         update();
     }
 
-    /* Changer la couleur des tuiles */
+    /*
+    * Change la couleur des tuiles
+    */
     public void setTileColor(int color){
         this.tileColor=color;
     }
