@@ -5,7 +5,13 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_tiles_start">TilesStartActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Préférences</string>
+    <string name="bouton_facile">Niveau Facile</string>
+    <string name="bouton_normal">Niveau Normal</string>
+    <string name="bouton_difficile">Niveau Difficile</string>
+    <string name="bouton_valider">Valider</string>
+    <string name="bouton_ok"> Ok </string>
 </resources>

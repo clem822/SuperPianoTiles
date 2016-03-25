@@ -2,6 +2,8 @@ package fr.ups.sim.superpianotiles;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class TilesStartActivity extends Activity {
 
@@ -40,39 +44,30 @@ public class TilesStartActivity extends Activity {
     private boolean aCommence = false;
     private boolean perdu = false;
 
+    private SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiles_start);
 
-        //System.out.println(periodeDeRafraichissement);
-        //System.out.println(periodeDeDefilement);
+        //Recupere les preferences de l'utilisateur
+        preferences = getDefaultSharedPreferences(getApplicationContext());
 
         //ICI - Commentez le code
         tilesView = (TilesView) findViewById(R.id.view);
+        tilesView.setTileColor(preferences.getInt("couleur", Color.BLUE));
 
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
 
-        //tilesQueue = new TilesQueue();
         tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1, NB_TILES_LARGEUR);
         tilesView.setTilesQueue(tilesQueue);
 
-        int pos = generateRandomPosition();
-        tilesQueue.addTile(0, pos);
+        ajouterLigne(0, NIVEAU_NORMAL);
         for (int i = 1 ; i<NB_TILES_HAUTEUR+1 ; ++i)
         {
-            int nbTile = nbTileRandom(niveau);
-            if (nbTile == 1 || nbTile == 2)
-            {
-                pos = generateRandomPosition();
-                tilesQueue.addTile(i, pos);
-            }
-            if (nbTile == 2)
-            {
-                pos = generateRandomPosition(pos);
-                tilesQueue.addTile(i, pos);
-            }
+            ajouterLigne(i, niveau);
         }
 
                 //ICI - Commentez le code
@@ -124,7 +119,7 @@ public class TilesStartActivity extends Activity {
             aCommence = true;
             tempsCourant = new Date().getTime();
             tempsDebut = tempsCourant;
-            System.out.println((int)periodeDeRafraichissement);
+            //System.out.println((int)periodeDeRafraichissement);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -146,6 +141,7 @@ public class TilesStartActivity extends Activity {
 
             } else {
                 t.setClicked(true);
+                traitementScore();
                 gestionPerte();
             }
         }
@@ -198,7 +194,6 @@ public class TilesStartActivity extends Activity {
     public void timerHandler() {
         tempsCourant = new Date().getTime();
         double deltaT = (double) (tempsCourant - tempsDebut);
-        //System.out.println(deltaT);
         if (deltaT >= periodeDeDefilement)
         {
             tempsDebut += periodeDeDefilement;
@@ -206,25 +201,15 @@ public class TilesStartActivity extends Activity {
 
             // Verifier que toutes les touches soient pressees
             if (!verificationIsClicked()) {
+                traitementScore();
                 gestionPerte();
                 deltaT = 0;
+
             }
             else
             {
                 tilesQueue.supprimerLigneBasse();
-
-                int nbTile = nbTileRandom(niveau);
-                int pos = 0;
-                if (nbTile == 1 || nbTile == 2)
-                {
-                    pos = generateRandomPosition();
-                    tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
-                }
-                if (nbTile == 2)
-                {
-                    pos = generateRandomPosition(pos);
-                    tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
-                }
+                ajouterLigne(NB_TILES_HAUTEUR, niveau);
             }
 
         }
@@ -235,7 +220,6 @@ public class TilesStartActivity extends Activity {
     }
 
     public boolean verificationIsClicked() {
-        //boolean isClicked = true;
         Tile[] tiles = tilesQueue.getTiles(0);
         
         if(tiles != null) {
@@ -246,11 +230,9 @@ public class TilesStartActivity extends Activity {
                     tile.setTrueTile(false);
                     tile.setClicked();
                     return false;
-                    //isClicked &= tile.isClicked();
                 }
             }
             return true;
-            //return isClicked;
         }
         return false;
     }
@@ -259,6 +241,7 @@ public class TilesStartActivity extends Activity {
      * Gere le jeu en cas de perte
      */
     public void gestionPerte() {
+
         perdu = true; // a voir si utilise finalement ?
         // interruption du timer
         timer.cancel();
@@ -272,6 +255,56 @@ public class TilesStartActivity extends Activity {
                 Toast.makeText(getBaseContext(), "Dans le cul t'as perdu !", Toast.LENGTH_LONG).show();
             }
         });*/
+    }
+
+    public void traitementScore()
+    {
+
+        preferences = getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = preferences.edit();
+        switch (niveau){
+            case NIVEAU_FACILE :
+                if(score>preferences.getInt("facile",0)){
+                    edit.putInt("facile",score);
+                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                }else{
+                    // MESSAGE
+                }
+                break;
+            case NIVEAU_NORMAL :
+                if(score>preferences.getInt("normal",0)){
+                    edit.putInt("normal",score);
+                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                }else{
+                    // MESSAGE
+                }
+                break;
+            case NIVEAU_DIFFICILE :
+                if(score>preferences.getInt("difficile",0)){
+                    edit.putInt("difficile",score);
+                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                }else{
+                    // MESSAGE
+                }
+                break;
+
+        }
+        edit.apply();
+    }
+
+    public void ajouterLigne(int index, int niveau) {
+        int pos = 0;
+        int nbTile = nbTileRandom(niveau);
+        if (nbTile == NIVEAU_NORMAL || nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition();
+            tilesQueue.addTile(index, pos);
+        }
+        if (nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition(pos);
+            tilesQueue.addTile(index, pos);
+        }
     }
 
 }
