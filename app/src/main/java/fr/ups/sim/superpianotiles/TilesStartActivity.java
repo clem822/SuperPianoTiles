@@ -145,7 +145,6 @@ public class TilesStartActivity extends Activity {
 
             } else {
                 t.setClicked(true);
-                traitementScore();
                 gestionPerte();
             }
         }
@@ -165,7 +164,6 @@ public class TilesStartActivity extends Activity {
 
             // Verifier que toutes les touches soient pressees
             if (!verificationIsClicked()) {
-                traitementScore();
                 gestionPerte();
                 deltaT = 0;
 
@@ -293,44 +291,6 @@ public class TilesStartActivity extends Activity {
         intent.putExtra("niveau", niveau);
         startActivity(intent);
 
-    }
-
-    /*
-    * TODO
-    */
-    public void traitementScore()
-    {
-
-        preferences = getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit = preferences.edit();
-        switch (niveau){
-            case NIVEAU_FACILE :
-                if(score>preferences.getInt("facile",0)){
-                    edit.putInt("facile",score);
-                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
-                }else{
-                    // MESSAGE
-                }
-                break;
-            case NIVEAU_NORMAL :
-                if(score>preferences.getInt("normal",0)){
-                    edit.putInt("normal",score);
-                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
-                }else{
-                    // MESSAGE
-                }
-                break;
-            case NIVEAU_DIFFICILE :
-                if(score>preferences.getInt("difficile",0)){
-                    edit.putInt("difficile",score);
-                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
-                }else{
-                    // MESSAGE
-                }
-                break;
-
-        }
-        edit.apply();
     }
 
 }

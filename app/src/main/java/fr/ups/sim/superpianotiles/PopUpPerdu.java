@@ -20,6 +20,12 @@ public class PopUpPerdu extends Activity {
 
     //public static PopUpPerdu PopUpPerdu;
 
+    private int score;
+    private int niveau;
+    private int meilleurScore;
+
+    private Intent intent;
+
     private SharedPreferences preferences;
 
     @Override
@@ -29,40 +35,54 @@ public class PopUpPerdu extends Activity {
 
         preferences = getDefaultSharedPreferences(getApplicationContext());
 
-        // afficher les scores
-        Intent intent = getIntent();
-        int score = intent.getIntExtra("score", 0);
-        int niveau = intent.getIntExtra("niveau", 0);
+        // afficher le score
+        intent = getIntent();
+        score = intent.getIntExtra("score", 0);
+        niveau = intent.getIntExtra("niveau", 0);
 
         TextView scorecourant = (TextView) findViewById(R.id.scorecourant);
         scorecourant.setText("Score : " + score);
 
+
+        // affichage meilleur score
         TextView popupscoremax = (TextView) findViewById(R.id.popupscoremax);
+
+        meilleurScore = 0;
 
         switch(niveau) {
             case TilesStartActivity.NIVEAU_FACILE : {
-                popupscoremax.setText("Score Max : " + Integer.toString(preferences.getInt("facile", 0)));
+                meilleurScore = preferences.getInt("facile", 0);
                 break;
             }
             case TilesStartActivity.NIVEAU_NORMAL : {
-                popupscoremax.setText("Score Max : " + Integer.toString(preferences.getInt("normal", 0)));
+                meilleurScore = preferences.getInt("normal", 0);
                 break;
             }
             case TilesStartActivity.NIVEAU_DIFFICILE : {
-                popupscoremax.setText("Score Max : " + Integer.toString(preferences.getInt("difficile", 0)));
+                meilleurScore = preferences.getInt("difficile", 0);
                 break;
             }
         }
 
+        System.out.println((score > meilleurScore) + "   " + score + "  >  " + meilleurScore);
+
+        if(score > meilleurScore) {
+            TextView popUpNewRecord = (TextView) findViewById(R.id.popupnewrecord);
+            popUpNewRecord.setText("Nouveau Record");
+            popupscoremax.setText("Ancien Meilleur Score : " + meilleurScore);
+            popUpNewRecord.setTextSize(40);
+            traitementScore();
+        } else {
+            popupscoremax.setText("Meilleur Score : " + meilleurScore);
+        }
 
         // gestion affichage sur une partie de l'ecran
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
-
         getWindow().setLayout((int) (width * .8), (int) (height * .8));
+
 
         // retour au menu
         Button boutonMenu = (Button) findViewById(R.id.popupretourmenu);
@@ -76,6 +96,7 @@ public class PopUpPerdu extends Activity {
             }
         });
 
+
         // rejouer
         Button boutonRestart = (Button) findViewById(R.id.popuprestart);
         boutonRestart.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +104,7 @@ public class PopUpPerdu extends Activity {
             public void onClick(View v) {
                 TilesStartActivity.tilesStartActivity.finish();
                 Intent intent = new Intent(PopUpPerdu.this, TilesStartActivity.class);
-                intent.putExtra("niveau", TilesStartActivity.NIVEAU_NORMAL);
+                intent.putExtra("niveau", niveau);
                 startActivity(intent);
                 fermer();
             }
@@ -101,6 +122,27 @@ public class PopUpPerdu extends Activity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         fermer();
+    }
+
+    /**
+     * Met a jour le meilleur score du niveau correspondant
+     */
+    public void traitementScore()
+    {
+        SharedPreferences.Editor edit = preferences.edit();
+        switch (niveau){
+            case TilesStartActivity.NIVEAU_FACILE :
+                edit.putInt("facile",score);
+                break;
+            case TilesStartActivity.NIVEAU_NORMAL :
+                edit.putInt("normal",score);
+                break;
+            case TilesStartActivity.NIVEAU_DIFFICILE :
+                edit.putInt("difficile",score);
+                break;
+
+        }
+        edit.apply();
     }
 
 }

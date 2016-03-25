@@ -17,7 +17,20 @@
         android:layout_gravity="center_horizontal"
         android:textColor="#ff0000"
         android:textSize="60dp"
-        android:singleLine="false" />
+        android:singleLine="false"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/popupnewrecord"
+        android:layout_gravity="center_horizontal"
+        android:textSize="0dp"
+        android:textColor="#ffea04"
+        android:text="popupnewrecord"
+        android:textStyle="bold"
+        android:gravity="center" />
 
     <TextView
             android:layout_width="wrap_content"
