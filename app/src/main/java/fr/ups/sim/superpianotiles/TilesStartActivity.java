@@ -35,7 +35,7 @@ public class TilesStartActivity extends Activity {
     private int score = 0;
 
     private double frequenceDeDefilement = 1.0; //(en Hz)
-    private double periodeDeDefilement = 1000/frequenceDeDefilement; //(en milli-secondes)
+    private double periodeDeDefilement; //(en milli-secondes)
 
     private double frequenceDeRafraichissement = 200; //(en Hz)
     private double periodeDeRafraichissement = 1000/frequenceDeRafraichissement; //(en milli-secondes)
@@ -47,6 +47,8 @@ public class TilesStartActivity extends Activity {
     private boolean perdu = false;
 
     private SharedPreferences preferences;
+
+    private boolean acceleration=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +159,7 @@ public class TilesStartActivity extends Activity {
     private void timerHandler() {
         tempsCourant = new Date().getTime();
         double deltaT = (double) (tempsCourant - tempsDebut);
+        gestionAcceleration();
         if (deltaT >= periodeDeDefilement)
         {
             tempsDebut += periodeDeDefilement;
@@ -291,6 +294,43 @@ public class TilesStartActivity extends Activity {
         intent.putExtra("niveau", niveau);
         startActivity(intent);
 
+    }
+
+    public void gestionAcceleration()
+    {
+        switch (niveau)
+        {
+            case NIVEAU_FACILE :
+                if(score%50==0 && !acceleration) {
+                    frequenceDeDefilement+=0.05;
+                    acceleration=true;
+                }
+                if(score%50>0){
+                    acceleration=false;
+                }
+                break;
+
+            case NIVEAU_NORMAL :
+                if(score%25==0 && !acceleration) {
+                    frequenceDeDefilement+=0.05;
+                    acceleration=true;
+                }
+                if(score%25>0){
+                    acceleration=false;
+                }
+                break;
+
+            case NIVEAU_DIFFICILE :
+                if(score%10==0 && !acceleration) {
+                    frequenceDeDefilement+=0.05;
+                    acceleration=true;
+                }
+                if(score%10>0){
+                    acceleration=false;
+                }
+                break;
+        }
+        periodeDeDefilement = 1000/frequenceDeDefilement;
     }
 
 }
