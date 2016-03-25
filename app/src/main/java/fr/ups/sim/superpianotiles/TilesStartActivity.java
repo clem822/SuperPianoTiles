@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +13,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,6 +56,11 @@ public class TilesStartActivity extends Activity {
 
     private boolean acceleration=false;
 
+    private boolean soundOn;
+    MediaPlayer mp_SoundTile = new MediaPlayer();
+    private MediaPlayer mp_SoundTileFail;
+    private List<MediaPlayer> soundUtilise = new ArrayList<MediaPlayer>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +70,30 @@ public class TilesStartActivity extends Activity {
 
         //Recupere les preferences de l'utilisateur
         preferences = getDefaultSharedPreferences(getApplicationContext());
+
+        // Creation  de la liste des sons utilisés pour les touches
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_a_sharp);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_b);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_c_sharp);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_d);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_e);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_f);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_f_b);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_g);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_g_b);
+        soundUtilise.add(mp_SoundTile);
+
+        mp_SoundTileFail = MediaPlayer.create(this, R.raw.sound_tile_fail);
+
+        soundOn = preferences.getBoolean("volume", true);
 
         //ICI - Commentez le code
         tilesView = (TilesView) findViewById(R.id.view);
@@ -135,22 +170,49 @@ public class TilesStartActivity extends Activity {
         }
 
         if (aCommence && t != null) {
+
             if (t.isTrueTile())
             {
 
                 if(premiereTile(evt.getY(pointerIndex))) {
                     boolean change = t.isClicked();
                     t.setClicked(true);
-                    if (change != t.isClicked())
+                    if (change != t.isClicked()) {
                         score++;
+                        playSoundTile(true);
+                    }
                 }
 
             } else {
                 t.setClicked(true);
+                playSoundTile(false);
                 gestionPerte();
             }
         }
         return true;
+    }
+
+    private void playSoundTile(boolean bonne){
+
+        if (!soundOn) {
+            if (bonne) {
+
+                List<MediaPlayer> sonJouable = new ArrayList<MediaPlayer>();
+                int possibilite = 0;
+                for (MediaPlayer mp : soundUtilise) {
+                    if (!mp.isPlaying()) {
+                        sonJouable.add(mp);
+                        possibilite++;
+                    }
+                }
+
+                if (possibilite != 0) {
+                    sonJouable.get((int) (Math.random() * possibilite)).start();
+                }
+
+            } else
+                mp_SoundTileFail.start();
+        }
     }
 
     /*
@@ -171,8 +233,7 @@ public class TilesStartActivity extends Activity {
                 deltaT = 0;
 
             }
-            else
-            {
+            else {
                 tilesQueue.supprimerLigneBasse();
                 ajouterLigne(NB_TILES_HAUTEUR, niveau);
             }
@@ -331,6 +392,11 @@ public class TilesStartActivity extends Activity {
                 break;
         }
         periodeDeDefilement = 1000/frequenceDeDefilement;
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 
 }
