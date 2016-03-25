@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.Date;
 import java.util.Timer;
@@ -18,6 +17,8 @@ import java.util.TimerTask;
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class TilesStartActivity extends Activity {
+
+    public static TilesStartActivity tilesStartActivity;
 
     public static final int NB_TILES_LARGEUR = 5;
     public static final int NB_TILES_HAUTEUR = 4;
@@ -42,7 +43,6 @@ public class TilesStartActivity extends Activity {
     private long tempsCourant;
 
     private boolean aCommence = false;
-    private boolean perdu = false;
 
     private SharedPreferences preferences;
 
@@ -50,6 +50,8 @@ public class TilesStartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiles_start);
+
+        tilesStartActivity = this;
 
         //Recupere les preferences de l'utilisateur
         preferences = getDefaultSharedPreferences(getApplicationContext());
@@ -119,7 +121,6 @@ public class TilesStartActivity extends Activity {
             aCommence = true;
             tempsCourant = new Date().getTime();
             tempsDebut = tempsCourant;
-            //System.out.println((int)periodeDeRafraichissement);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -242,19 +243,14 @@ public class TilesStartActivity extends Activity {
      */
     public void gestionPerte() {
 
-        perdu = true; // a voir si utilise finalement ?
         // interruption du timer
         timer.cancel();
         timer.purge();
         Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
         intent.putExtra("score", score);
+        intent.putExtra("niveau", niveau);
         startActivity(intent);
-        //Enlever ça !
-/*        runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getBaseContext(), "Dans le cul t'as perdu !", Toast.LENGTH_LONG).show();
-            }
-        });*/
+
     }
 
     public void traitementScore()

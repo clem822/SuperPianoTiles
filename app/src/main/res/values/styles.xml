@@ -24,7 +24,7 @@
     <!-- Backward-compatible version of ?android:attr/buttonBarButtonStyle -->
     <style name="ButtonBarButton" />
 
-    <style name="PopUpTheme">
+    <style name="PopUpTheme" parent="android:Theme.Light.NoTitleBar">
         <item name="android:windowIsTranslucent">true</item>
     </style>
 

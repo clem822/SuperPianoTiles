@@ -71,7 +71,6 @@ public class MenuActivity extends Activity {
                 intent.putExtra("niveau", TilesStartActivity.NIVEAU_DIFFICILE);
                 System.out.println(preferences.getInt("couleur", 0));
                 startActivity(intent);
-
             }
         });
 
