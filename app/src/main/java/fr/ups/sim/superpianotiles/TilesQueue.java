@@ -34,7 +34,7 @@ public class TilesQueue {
     }
 
     /**
-     *
+     *Ajoute une tuile à la hauteur et la position demandée
      * @param hauteur
      * @param position
      */
@@ -46,9 +46,9 @@ public class TilesQueue {
     }
 
     /**
-     *
+     * Renvoie le contenu de la ligne qui est à la hauteur passée en paramètres
      * @param hauteur
-     * @return
+     * @return Le contenu de la ligne qui est à la hauteur passée en paramètres
      */
     public Tile[] getTiles(int hauteur) {
         if (hauteur >= 0 && hauteur < nbNoeuds)
@@ -60,7 +60,7 @@ public class TilesQueue {
     }
 
     /**
-     *
+     * Supprime la ligne la plus basse de la file
      */
     public void supprimerLigneBasse() {
         bas.supprimerTiles();
@@ -68,7 +68,7 @@ public class TilesQueue {
     }
 
     /**
-     *
+     * Ajoute un noeud à le file
      */
     private void ajouterNoeud() {
         if (bas == null)
