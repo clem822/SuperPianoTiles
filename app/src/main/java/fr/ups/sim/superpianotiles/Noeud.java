@@ -1,9 +1,5 @@
 package fr.ups.sim.superpianotiles;
 
-import java.util.Arrays;
-import java.util.NavigableSet;
-import java.util.TreeSet;
-
 /**
  * Created by clem3 on 21/03/2016.
  */
@@ -12,6 +8,10 @@ public class Noeud {
     private Noeud precedent;
     private Tile[] tabTiles;
 
+    /**
+     * Initialise un nouvel objet Noeud qui contiendra "nbTuiles" tuiles
+     * @param nbTuiles Nombre de tuiles du noeud
+     */
     public Noeud(int nbTuiles) {
         suivant = null;
         precedent = null;
@@ -21,6 +21,10 @@ public class Noeud {
         }
     }
 
+    /**
+     * Ajoute une tuile à la position passée en paramètre.
+     * @param position
+     */
     public void addTile(int position) {
         if (position >=0 && position < tabTiles.length)
         {
@@ -29,31 +33,54 @@ public class Noeud {
         }
     }
 
-    public void setSuivant(Noeud suivant) {
-        this.suivant = suivant;
-    }
-
-    public void setPrecedent(Noeud precedent) {
-        this.precedent = precedent;
-    }
-
-    public Noeud getSuivant() {
-        return suivant;
-    }
-
-    public Noeud getPrecedent() {
-        return precedent;
-    }
-
-    public Tile[] getTiles() {
-        return tabTiles;
-    }
-
+    /**
+     * Supprime toutes les tuiles du noeud.
+     */
     public void supprimerTiles() {
         for (Tile tile : tabTiles) {
             tile.setTrueTile(false);
             tile.setClicked(false);
         }
+    }
+
+    /**
+     * Getter sur le noeud suivant
+     * @return Le noeud suivant
+     */
+    public Noeud getSuivant() {
+        return suivant;
+    }
+
+    /**
+     * Getter sur le noeud precedent
+     * @return Le noeud precedent
+     */
+    public Noeud getPrecedent() {
+        return precedent;
+    }
+
+    /**
+     * Getter sur le tableau de tuiles
+     * @return Le tableau de tuiles
+     */
+    public Tile[] getTiles() {
+        return tabTiles;
+    }
+
+    /**
+     * Setter sur le noeud suivant
+     * @param suivant
+     */
+    public void setSuivant(Noeud suivant) {
+        this.suivant = suivant;
+    }
+
+    /**
+     * Setter sur le noeud precedent
+     * @param precedent
+     */
+    public void setPrecedent(Noeud precedent) {
+        this.precedent = precedent;
     }
 
     @Override
@@ -65,67 +92,3 @@ public class Noeud {
         return str;
     }
 }
-
-
-/*
-package fr.ups.sim.superpianotiles;
-
-import java.util.Arrays;
-import java.util.NavigableSet;
-import java.util.TreeSet;
-
-*/
-/**
- * Created by clem3 on 21/03/2016.
- *//*
-
-public class Noeud {
-    private Noeud suivant;
-    private Noeud precedent;
-    private NavigableSet<Tile> tiles = new TreeSet<>();
-
-    public Noeud() {
-        suivant = null;
-        precedent = null;
-    }
-
-    public void addTile(Tile t)
-    {
-        tiles.add(t);
-    }
-
-    public void setSuivant(Noeud suivant) {
-        this.suivant = suivant;
-    }
-
-    public void setPrecedent(Noeud precedent) {
-        this.precedent = precedent;
-    }
-
-    public Noeud getSuivant() {
-        return suivant;
-    }
-
-    public Noeud getPrecedent() {
-        return precedent;
-    }
-
-    public NavigableSet<Tile> getTiles() {
-        return tiles;
-    }
-
-    public void supprimerTiles() {
-        tiles = new TreeSet<>();
-    }
-
-    @Override
-    public String toString() {
-        String str = new String();
-        NavigableSet<Tile> tiles = getTiles();
-        for (Tile tile : tiles) {
-            str += " " + tile.toString();
-        }
-        return str;
-    }
-}
-*/
