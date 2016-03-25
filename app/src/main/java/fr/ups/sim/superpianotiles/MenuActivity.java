@@ -13,7 +13,7 @@ import android.widget.TextView;
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 /**
- * Created by clem3 on 21/03/2016.
+ * Created by clem3 on 21/03/2016
  */
 public class MenuActivity extends Activity {
 
