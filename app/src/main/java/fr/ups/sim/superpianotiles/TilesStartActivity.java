@@ -263,12 +263,15 @@ public class TilesStartActivity extends Activity {
         // interruption du timer
         timer.cancel();
         timer.purge();
+        Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
+        intent.putExtra("score", score);
+        startActivity(intent);
         //Enlever ça !
-        runOnUiThread(new Runnable() {
+/*        runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(getBaseContext(), "Dans le cul t'as perdu !", Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
     }
 
 }
