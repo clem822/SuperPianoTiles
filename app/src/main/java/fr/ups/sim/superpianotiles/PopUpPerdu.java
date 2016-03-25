@@ -28,6 +28,12 @@ public class PopUpPerdu extends Activity {
 
     private SharedPreferences preferences;
 
+    private TextView scorecourant;
+    private TextView popupscoremax;
+
+    private Button boutonMenu;
+    private Button boutonRestart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +46,12 @@ public class PopUpPerdu extends Activity {
         score = intent.getIntExtra("score", 0);
         niveau = intent.getIntExtra("niveau", 0);
 
-        TextView scorecourant = (TextView) findViewById(R.id.scorecourant);
+        scorecourant = (TextView) findViewById(R.id.scorecourant);
         scorecourant.setText("Score : " + score);
 
 
         // affichage meilleur score
-        TextView popupscoremax = (TextView) findViewById(R.id.popupscoremax);
+        popupscoremax = (TextView) findViewById(R.id.popupscoremax);
 
         meilleurScore = 0;
 
@@ -63,8 +69,6 @@ public class PopUpPerdu extends Activity {
                 break;
             }
         }
-
-        System.out.println((score > meilleurScore) + "   " + score + "  >  " + meilleurScore);
 
         if(score > meilleurScore) {
             TextView popUpNewRecord = (TextView) findViewById(R.id.popupnewrecord);
@@ -85,7 +89,7 @@ public class PopUpPerdu extends Activity {
 
 
         // retour au menu
-        Button boutonMenu = (Button) findViewById(R.id.popupretourmenu);
+        boutonMenu = (Button) findViewById(R.id.popupretourmenu);
         boutonMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +102,7 @@ public class PopUpPerdu extends Activity {
 
 
         // rejouer
-        Button boutonRestart = (Button) findViewById(R.id.popuprestart);
+        boutonRestart = (Button) findViewById(R.id.popuprestart);
         boutonRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
