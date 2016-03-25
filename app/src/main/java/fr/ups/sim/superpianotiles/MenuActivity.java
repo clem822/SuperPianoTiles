@@ -44,9 +44,6 @@ public class MenuActivity extends Activity {
             }
         });
 
-        //score du niveau facile (sera à 0 si pas encore de meilleur score)
-        scoreFacile = (TextView) findViewById(R.id.scoreFacile);
-        scoreFacile.setText(Integer.toString(preferences.getInt("facile", 0)));
 
         boutonNormal = (Button) findViewById(R.id.buttonNormal);
         boutonNormal.setOnClickListener(new View.OnClickListener() {
@@ -58,9 +55,6 @@ public class MenuActivity extends Activity {
             }
         });
 
-        //score du niveau normal (sera à 0 si pas encore de meilleur score)
-        scoreNormal = (TextView) findViewById(R.id.scoreNormal);
-        scoreNormal.setText(Integer.toString(preferences.getInt("normal", 0)));
 
         boutonDifficile = (Button) findViewById(R.id.buttonDifficile);
         boutonDifficile.setOnClickListener(new View.OnClickListener() {
@@ -74,9 +68,7 @@ public class MenuActivity extends Activity {
             }
         });
 
-        //score du difficile facile (sera à 0 si pas encore de meilleur score)
-        scoreDifficile = (TextView) findViewById(R.id.scoreDifficile);
-        scoreDifficile.setText(Integer.toString(preferences.getInt("difficile", 0)));
+        recupererScores();
 
     }
 
@@ -102,5 +94,27 @@ public class MenuActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recupererScores();
+    }
+
+    public void recupererScores() {
+
+        //score du niveau facile (sera à 0 si pas encore de meilleur score)
+        scoreFacile = (TextView) findViewById(R.id.scoreFacile);
+        scoreFacile.setText(Integer.toString(preferences.getInt("facile", 0)));
+
+        //score du niveau normal (sera à 0 si pas encore de meilleur score)
+        scoreNormal = (TextView) findViewById(R.id.scoreNormal);
+        scoreNormal.setText(Integer.toString(preferences.getInt("normal", 0)));
+
+        //score du difficile facile (sera à 0 si pas encore de meilleur score)
+        scoreDifficile = (TextView) findViewById(R.id.scoreDifficile);
+        scoreDifficile.setText(Integer.toString(preferences.getInt("difficile", 0)));
+
     }
 }
