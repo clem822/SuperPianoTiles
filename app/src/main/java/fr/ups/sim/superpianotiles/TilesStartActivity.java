@@ -216,7 +216,7 @@ public class TilesStartActivity extends Activity {
 
     private void playSoundTile(boolean bonne){
 
-        if (!soundOn) {
+        if (soundOn) {
             if (bonne) {
 
                 List<MediaPlayer> sonJouable = new ArrayList<MediaPlayer>();
