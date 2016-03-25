@@ -105,6 +105,7 @@ public class TilesStartActivity extends Activity {
 
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
+
         //initialisation des vitesses de depart par niveau
         switch (niveau)
         {
