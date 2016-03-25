@@ -47,7 +47,7 @@ public class MenuActivity extends Activity {
 
         //score du niveau facile (sera à 0 si pas encore de meilleur score)
         scoreFacile = (TextView) findViewById(R.id.scoreFacile);
-        scoreFacile.setText("meilleur score : " + Integer.toString(preferences.getInt("facile", 0)));
+        scoreFacile.setText(Integer.toString(preferences.getInt("facile", 0)));
 
         boutonNormal = (Button) findViewById(R.id.buttonNormal);
         boutonNormal.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +61,7 @@ public class MenuActivity extends Activity {
 
         //score du niveau normal (sera à 0 si pas encore de meilleur score)
         scoreNormal = (TextView) findViewById(R.id.scoreNormal);
-        scoreNormal.setText("meilleur score : " + Integer.toString(preferences.getInt("normal", 0)));
+        scoreNormal.setText(Integer.toString(preferences.getInt("normal", 0)));
 
         boutonDifficile = (Button) findViewById(R.id.buttonDifficile);
         boutonDifficile.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class MenuActivity extends Activity {
 
         //score du difficile facile (sera à 0 si pas encore de meilleur score)
         scoreDifficile = (TextView) findViewById(R.id.scoreDifficile);
-        scoreDifficile.setText("meilleur score : " + Integer.toString(preferences.getInt("difficile", 0)));
+        scoreDifficile.setText(Integer.toString(preferences.getInt("difficile", 0)));
 
     }
 

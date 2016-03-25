@@ -24,7 +24,8 @@ public class SettingsActivity extends Activity {
     private RadioButton couleurVert;
 
     private Button valider;
-    private  Button defaut;
+    private Button defaut;
+    private Button raz;
 
     private SharedPreferences.Editor edit;
     private SharedPreferences preferences;
@@ -43,7 +44,8 @@ public class SettingsActivity extends Activity {
         couleurVert = (RadioButton) findViewById(R.id.couleurVert);
 
         defaut = (Button) findViewById(R.id.defaut);
-        valider = (Button)  findViewById(R.id.valider);
+        valider = (Button) findViewById(R.id.valider);
+        raz = (Button) findViewById(R.id.raz);
 
         volume.setChecked(preferences.getBoolean("volume", true));
 
@@ -83,6 +85,18 @@ public class SettingsActivity extends Activity {
                 edit = preferences.edit();
                 edit.remove("couleur");
                 edit.remove("volume");
+                edit.apply();
+                finish();
+            }
+        });
+
+        raz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit = preferences.edit();
+                edit.remove("facile");
+                edit.remove("normal");
+                edit.remove("difficile");
                 edit.apply();
                 finish();
             }

@@ -141,6 +141,7 @@ public class TilesStartActivity extends Activity {
 
             } else {
                 t.setClicked(true);
+                traitementScore();
                 gestionPerte();
             }
         }
@@ -200,8 +201,10 @@ public class TilesStartActivity extends Activity {
 
             // Verifier que toutes les touches soient pressees
             if (!verificationIsClicked()) {
+                traitementScore();
                 gestionPerte();
                 deltaT = 0;
+
             }
             else
             {
@@ -238,7 +241,6 @@ public class TilesStartActivity extends Activity {
      * Gere le jeu en cas de perte
      */
     public void gestionPerte() {
-        traitementScore();
 
         perdu = true; // a voir si utilise finalement ?
         // interruption du timer
