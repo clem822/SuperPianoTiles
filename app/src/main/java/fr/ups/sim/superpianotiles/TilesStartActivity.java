@@ -342,9 +342,11 @@ public class TilesStartActivity extends Activity {
         return true;
     }
 
-    /*
-    * TODO
-    */
+    /**
+     * Verifier si les tiles de la hauteur 0 sont toutes a l'etat clicked
+     * @return true si elles sont a l'etat clicked
+     * sinon false
+     */
     public boolean verificationIsClicked() {
         Tile[] tiles = tilesQueue.getTiles(0);
         
