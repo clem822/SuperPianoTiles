@@ -283,34 +283,40 @@ public class TilesStartActivity extends Activity {
 
         preferences = getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor edit = preferences.edit();
+        Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
+        intent.putExtra("score", score);
         switch (niveau){
             case NIVEAU_FACILE :
+                intent.putExtra("meilleurScore", preferences.getInt("facile",0));
                 if(score>preferences.getInt("facile",0)){
                     edit.putInt("facile",score);
-                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                    intent.putExtra("message", "Nouveau reccord");
                 }else{
-                    // MESSAGE
+                    intent.putExtra("message","Fin de partie");
                 }
                 break;
             case NIVEAU_NORMAL :
+                intent.putExtra("meilleurScore", preferences.getInt("normal",0));
                 if(score>preferences.getInt("normal",0)){
                     edit.putInt("normal",score);
-                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                    intent.putExtra("message", "Nouveau reccord");
                 }else{
-                    // MESSAGE
+                    intent.putExtra("message","Fin de partie");
                 }
                 break;
             case NIVEAU_DIFFICILE :
+                intent.putExtra("meilleurScore", preferences.getInt("difficile",0));
                 if(score>preferences.getInt("difficile",0)){
                     edit.putInt("difficile",score);
-                    //AJOUTER AFFICHAGE MEILLEUR SCORE BATTU
+                    intent.putExtra("message","Nouveau reccord");
                 }else{
-                    // MESSAGE
+                    intent.putExtra("message","Fin de partie");
                 }
                 break;
 
         }
         edit.apply();
+        startActivity(intent);
     }
 
     /**
@@ -322,9 +328,6 @@ public class TilesStartActivity extends Activity {
         // interruption du timer
         timer.cancel();
         timer.purge();
-        Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
-        intent.putExtra("score", score);
-        startActivity(intent);
     }
 
 }
