@@ -38,7 +38,7 @@ public class TilesStartActivity extends Activity {
     private int niveau;
     private int score = 0;
 
-    private double frequenceDeDefilement = 1.0; //(en Hz)
+    private double frequenceDeDefilement; //(en Hz)
     private double periodeDeDefilement; //(en milli-secondes)
 
     private double frequenceDeRafraichissement = 200; //(en Hz)
@@ -70,6 +70,23 @@ public class TilesStartActivity extends Activity {
 
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
+        //initialisation des vitesses de depart par niveau
+        switch (niveau)
+        {
+            case NIVEAU_FACILE :
+                frequenceDeDefilement = 1.5;
+                break;
+
+            case NIVEAU_NORMAL :
+                frequenceDeDefilement = 2.0;
+                break;
+
+            case NIVEAU_DIFFICILE :
+                frequenceDeDefilement = 2.5;
+                break;
+            default:
+                frequenceDeDefilement = 1.0;
+        }
 
         tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1, NB_TILES_LARGEUR);
         tilesView.setTilesQueue(tilesQueue);
