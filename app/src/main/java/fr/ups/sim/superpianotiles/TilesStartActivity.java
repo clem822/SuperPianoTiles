@@ -70,68 +70,28 @@ public class TilesStartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiles_start);
 
+        //TODO C'est vraiment utile de stocker sa propre référence ?
         tilesStartActivity = this;
 
         //Recupere les preferences de l'utilisateur
         preferences = getDefaultSharedPreferences(getApplicationContext());
 
-        // Creation  de la liste des sons utilisés pour les touches
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_a_sharp);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_b);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_c_sharp);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_d);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_e);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_f);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_f_b);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_g);
-        soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_g_b);
-        soundUtilise.add(mp_SoundTile);
-
-        mp_SoundTileFail = MediaPlayer.create(this, R.raw.sound_tile_fail);
-
-        soundOn = preferences.getBoolean("volume", true);
-
         //ICI - Commentez le code
         tilesView = (TilesView) findViewById(R.id.view);
         tilesView.setTileColor(preferences.getInt("couleur", Color.BLUE));
 
+        //récupération du niva de la partie
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
 
+        // Creation  de la liste des sons utilisés pour les touches
+        initSons();
+
         //initialisation des vitesses de depart par niveau
-        switch (niveau)
-        {
-            case NIVEAU_FACILE :
-                frequenceDeDefilement = 1.5;
-                break;
+        initVitesse();
 
-            case NIVEAU_NORMAL :
-                frequenceDeDefilement = 2.0;
-                break;
-
-            case NIVEAU_DIFFICILE :
-                frequenceDeDefilement = 2.5;
-                break;
-            default:
-                frequenceDeDefilement = 1.0;
-        }
-
-        tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1, NB_TILES_LARGEUR);
-        tilesView.setTilesQueue(tilesQueue);
-
-        ajouterLigne(0, NIVEAU_NORMAL);
-        for (int i = 1 ; i<NB_TILES_HAUTEUR+1 ; ++i)
-        {
-            ajouterLigne(i, niveau);
-        }
+        //initialisation de la file de tuile
+        initTilesQueue();
 
                 //ICI - Commentez le code
         tilesView.setOnTouchListener(new View.OnTouchListener() {
@@ -151,8 +111,8 @@ public class TilesStartActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tiles_start, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.menu_tiles_start, menu);
+        return false;
     }
 
     @Override
@@ -332,7 +292,7 @@ public class TilesStartActivity extends Activity {
      * @param Y ordonnee
      * @return true si aucune tile n'est en dessous
      */
-    public boolean premiereTile(float Y) {
+    private boolean premiereTile(float Y) {
         for(int hauteur = 0; hauteur <  tilesView.getHauteurClicked(Y); hauteur++) {
             Tile[] tiles = tilesQueue.getTiles(hauteur);
             for (Tile tile : tiles) {
@@ -348,7 +308,7 @@ public class TilesStartActivity extends Activity {
      * @return true si elles sont a l'etat clicked
      * sinon false
      */
-    public boolean verificationIsClicked() {
+    private boolean verificationIsClicked() {
         Tile[] tiles = tilesQueue.getTiles(0);
         
         if(tiles != null) {
@@ -369,7 +329,7 @@ public class TilesStartActivity extends Activity {
     /**
      * Gere le jeu en cas de perte
      */
-    public void gestionPerte() {
+    private void gestionPerte() {
 
         // interruption du timer
         timer.cancel();
@@ -381,7 +341,7 @@ public class TilesStartActivity extends Activity {
 
     }
 
-    public void gestionAcceleration()
+    private void gestionAcceleration()
     {
         // nombre de tuiles entre chaque acceleration
         int pas;
@@ -413,7 +373,65 @@ public class TilesStartActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        // interruption du timer
+        timer.cancel();
+        timer.purge();
         this.finish();
+    }
+
+    private void initSons() {
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_a_sharp);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_b);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_c_sharp);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_d);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_e);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_f);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_f_b);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_g);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_g_b);
+        soundUtilise.add(mp_SoundTile);
+
+        mp_SoundTileFail = MediaPlayer.create(this, R.raw.sound_tile_fail);
+
+        soundOn = preferences.getBoolean("volume", true);
+    }
+
+    private void initVitesse() {
+        switch (niveau)
+        {
+            case NIVEAU_FACILE :
+                frequenceDeDefilement = 1.5;
+                break;
+
+            case NIVEAU_NORMAL :
+                frequenceDeDefilement = 2.0;
+                break;
+
+            case NIVEAU_DIFFICILE :
+                frequenceDeDefilement = 2.5;
+                break;
+            default:
+                frequenceDeDefilement = 1.0;
+        }
+    }
+
+    private void initTilesQueue() {
+        tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1, NB_TILES_LARGEUR);
+        tilesView.setTilesQueue(tilesQueue);
+
+        ajouterLigne(0, NIVEAU_NORMAL);
+        for (int i = 1 ; i<NB_TILES_HAUTEUR+1 ; ++i)
+        {
+            ajouterLigne(i, niveau);
+        }
     }
 
 }
