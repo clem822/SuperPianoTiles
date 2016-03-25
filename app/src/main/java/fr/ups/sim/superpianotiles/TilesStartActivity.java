@@ -32,7 +32,7 @@ public class TilesStartActivity extends Activity {
     private int niveau;
     private int score = 0;
 
-    private double frequenceDeDefilement = 2.0; //(en Hz)
+    private double frequenceDeDefilement = 1.0; //(en Hz)
     private double periodeDeDefilement = 1000/frequenceDeDefilement; //(en milli-secondes)
 
     private double frequenceDeRafraichissement = 200; //(en Hz)
@@ -51,9 +51,6 @@ public class TilesStartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiles_start);
 
-        //System.out.println(periodeDeRafraichissement);
-        //System.out.println(periodeDeDefilement);
-
         //Recupere les preferences de l'utilisateur
         preferences = getDefaultSharedPreferences(getApplicationContext());
 
@@ -64,25 +61,13 @@ public class TilesStartActivity extends Activity {
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
 
-        //tilesQueue = new TilesQueue();
         tilesQueue = new TilesQueue(NB_TILES_HAUTEUR + 1, NB_TILES_LARGEUR);
         tilesView.setTilesQueue(tilesQueue);
 
-        int pos = generateRandomPosition();
-        tilesQueue.addTile(0, pos);
+        ajouterLigne(0, NIVEAU_NORMAL);
         for (int i = 1 ; i<NB_TILES_HAUTEUR+1 ; ++i)
         {
-            int nbTile = nbTileRandom(niveau);
-            if (nbTile == 1 || nbTile == 2)
-            {
-                pos = generateRandomPosition();
-                tilesQueue.addTile(i, pos);
-            }
-            if (nbTile == 2)
-            {
-                pos = generateRandomPosition(pos);
-                tilesQueue.addTile(i, pos);
-            }
+            ajouterLigne(i, niveau);
         }
 
                 //ICI - Commentez le code
@@ -134,7 +119,7 @@ public class TilesStartActivity extends Activity {
             aCommence = true;
             tempsCourant = new Date().getTime();
             tempsDebut = tempsCourant;
-            System.out.println((int)periodeDeRafraichissement);
+            //System.out.println((int)periodeDeRafraichissement);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -208,7 +193,6 @@ public class TilesStartActivity extends Activity {
     public void timerHandler() {
         tempsCourant = new Date().getTime();
         double deltaT = (double) (tempsCourant - tempsDebut);
-        //System.out.println(deltaT);
         if (deltaT >= periodeDeDefilement)
         {
             tempsDebut += periodeDeDefilement;
@@ -222,19 +206,7 @@ public class TilesStartActivity extends Activity {
             else
             {
                 tilesQueue.supprimerLigneBasse();
-
-                int nbTile = nbTileRandom(niveau);
-                int pos = 0;
-                if (nbTile == 1 || nbTile == 2)
-                {
-                    pos = generateRandomPosition();
-                    tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
-                }
-                if (nbTile == 2)
-                {
-                    pos = generateRandomPosition(pos);
-                    tilesQueue.addTile(NB_TILES_HAUTEUR, pos);
-                }
+                ajouterLigne(NB_TILES_HAUTEUR, niveau);
             }
 
         }
@@ -245,7 +217,6 @@ public class TilesStartActivity extends Activity {
     }
 
     public boolean verificationIsClicked() {
-        //boolean isClicked = true;
         Tile[] tiles = tilesQueue.getTiles(0);
         
         if(tiles != null) {
@@ -256,11 +227,9 @@ public class TilesStartActivity extends Activity {
                     tile.setTrueTile(false);
                     tile.setClicked();
                     return false;
-                    //isClicked &= tile.isClicked();
                 }
             }
             return true;
-            //return isClicked;
         }
         return false;
     }
@@ -316,6 +285,21 @@ public class TilesStartActivity extends Activity {
 
         }
         edit.apply();
+    }
+
+    public void ajouterLigne(int index, int niveau) {
+        int pos = 0;
+        int nbTile = nbTileRandom(niveau);
+        if (nbTile == NIVEAU_NORMAL || nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition();
+            tilesQueue.addTile(index, pos);
+        }
+        if (nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition(pos);
+            tilesQueue.addTile(index, pos);
+        }
     }
 
 }
