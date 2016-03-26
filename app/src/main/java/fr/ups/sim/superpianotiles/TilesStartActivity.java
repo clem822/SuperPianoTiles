@@ -13,11 +13,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -110,15 +115,22 @@ public class TilesStartActivity extends Activity {
     }
 
     private void initSons() {
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_a_sharp);
+
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_a);
         soundUtilise.add(mp_SoundTile);
         mp_SoundTile = MediaPlayer.create(this, R.raw.piano_b);
         soundUtilise.add(mp_SoundTile);
-        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_c_sharp);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_bb);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_c);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_c_b);
         soundUtilise.add(mp_SoundTile);
         mp_SoundTile = MediaPlayer.create(this, R.raw.piano_d);
         soundUtilise.add(mp_SoundTile);
         mp_SoundTile = MediaPlayer.create(this, R.raw.piano_e);
+        soundUtilise.add(mp_SoundTile);
+        mp_SoundTile = MediaPlayer.create(this, R.raw.piano_eb);
         soundUtilise.add(mp_SoundTile);
         mp_SoundTile = MediaPlayer.create(this, R.raw.piano_f);
         soundUtilise.add(mp_SoundTile);
@@ -212,8 +224,9 @@ public class TilesStartActivity extends Activity {
         return true;
     }
 
+
     /**
-     *
+     * Joue un son de touche de piano aleatoire
      * @param bonne
      */
     private void playSoundTile(boolean bonne){

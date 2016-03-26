@@ -41,7 +41,22 @@ public class PopUpPerdu extends Activity {
 
         preferences = getDefaultSharedPreferences(getApplicationContext());
 
-        // afficher le score
+        // gestion affichage sur une partie de l'ecran
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+        getWindow().setLayout((int) (width * .8), (int) (height * .8));
+
+        affichageScore();
+
+        initButton();
+
+    }
+
+    private void affichageScore() {
+
+        // afficher le score obtenu
         intent = getIntent();
         score = intent.getIntExtra("score", 0);
         niveau = intent.getIntExtra("niveau", 0);
@@ -80,13 +95,9 @@ public class PopUpPerdu extends Activity {
             popupscoremax.setText("Meilleur Score : " + meilleurScore);
         }
 
-        // gestion affichage sur une partie de l'ecran
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int width = metrics.widthPixels;
-        int height = metrics.heightPixels;
-        getWindow().setLayout((int) (width * .8), (int) (height * .8));
+    }
 
+    private void initButton() {
 
         // retour au menu
         boutonMenu = (Button) findViewById(R.id.popupretourmenu);
@@ -113,7 +124,6 @@ public class PopUpPerdu extends Activity {
                 fermer();
             }
         });
-
     }
 
     public void fermer() {
@@ -131,7 +141,7 @@ public class PopUpPerdu extends Activity {
     /**
      * Met a jour le meilleur score du niveau correspondant
      */
-    public void traitementScore()
+    private void traitementScore()
     {
         SharedPreferences.Editor edit = preferences.edit();
         switch (niveau){
