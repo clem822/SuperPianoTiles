@@ -71,6 +71,7 @@ public class TilesStartActivity extends Activity {
         setContentView(R.layout.activity_tiles_start);
 
         //TODO C'est vraiment utile de stocker sa propre référence ?
+        //oui car c'est un bon moyen de la fermer a distance (dans le popup de fin de partie par exemple)
         tilesStartActivity = this;
 
         //Recupere les preferences de l'utilisateur
@@ -80,7 +81,7 @@ public class TilesStartActivity extends Activity {
         tilesView = (TilesView) findViewById(R.id.view);
         tilesView.setTileColor(preferences.getInt("couleur", Color.BLUE));
 
-        //récupération du niva de la partie
+        //récupération du niveau de la partie
         Intent intent = getIntent();
         niveau = intent.getIntExtra("niveau", 0);
 
