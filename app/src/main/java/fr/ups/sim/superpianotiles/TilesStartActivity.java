@@ -109,277 +109,6 @@ public class TilesStartActivity extends Activity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_tiles_start, menu);
-        return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            // ICI - A compléter pour déclencher l'ouverture de l'écran de paramétrage
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /*
-     * ICI - Commentez le code
-     */
-    private boolean onTouchEventHandler (MotionEvent evt){
-        int pointerIndex = evt.getActionIndex();
-        Tile t = tilesView.getClickedTile(evt.getX(pointerIndex), evt.getY(pointerIndex));
-
-        if (!aCommence && t != null && t.isTrueTile() && premiereTile(evt.getY(pointerIndex))) {
-            aCommence = true;
-            tempsCourant = new Date().getTime();
-            tempsDebut = tempsCourant;
-            //System.out.println((int)periodeDeRafraichissement);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    timerHandler();
-                }
-            }, new Date(), (int) periodeDeRafraichissement);
-        }
-
-        if (aCommence && t != null) {
-
-            if (t.isTrueTile())
-            {
-
-                if(premiereTile(evt.getY(pointerIndex))) {
-                    boolean change = t.isClicked();
-                    t.setClicked(true);
-                    if (change != t.isClicked()) {
-                        score++;
-                        playSoundTile(true);
-                    }
-                }
-
-            } else {
-                t.setClicked(true);
-                playSoundTile(false);
-                gestionPerte();
-            }
-        }
-        return true;
-    }
-
-    private void playSoundTile(boolean bonne){
-
-        if (soundOn) {
-            if (bonne) {
-
-                List<MediaPlayer> sonJouable = new ArrayList<MediaPlayer>();
-                int possibilite = 0;
-                for (MediaPlayer mp : soundUtilise) {
-                    if (!mp.isPlaying()) {
-                        sonJouable.add(mp);
-                        possibilite++;
-                    }
-                }
-
-                if (possibilite != 0) {
-                    sonJouable.get((int) (Math.random() * possibilite)).start();
-                }
-
-            } else
-                mp_SoundTileFail.start();
-        }
-    }
-
-    /*
-    * Handler du timer. C'est ici qu'est géré le jeu.
-    */
-    private void timerHandler() {
-        tempsCourant = new Date().getTime();
-        double deltaT = (double) (tempsCourant - tempsDebut);
-        gestionAcceleration();
-        if (deltaT >= periodeDeDefilement)
-        {
-            tempsDebut += periodeDeDefilement;
-            deltaT -= periodeDeDefilement;
-
-            // Verifier que toutes les touches soient pressees
-            if (!verificationIsClicked()) {
-                gestionPerte();
-                deltaT = 0;
-
-            }
-            else {
-                tilesQueue.supprimerLigneBasse();
-                ajouterLigne(NB_TILES_HAUTEUR, niveau);
-            }
-
-        }
-
-        tilesView.setScore(score);
-
-        tilesView.setDecalage(deltaT, periodeDeDefilement);
-    }
-
-    /*
-    * Génère une position horizontale pour une Tile.
-    * @return La position
-    */
-    private int generateRandomPosition() {
-        return (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
-    }
-
-    /*
-    * Génère une position horizontale pour une Tile en excluant la position passée en paramètre.
-    * @param positionInterdite La position à exclure
-    * @return La position
-    */
-    private int generateRandomPosition(int positionInterdite) {
-        int pos;
-        do
-        {
-            pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
-        } while (pos == positionInterdite);
-        return pos;
-    }
-
-    /*
-    * Génère un nombre de Tile aléatoire pour une ligne selon le niveau du jeu.
-    * @param niveau Niveau du jeu
-    */
-    private int nbTileRandom(int niveau) {
-        switch (niveau)
-        {
-            case NIVEAU_FACILE :
-                return (int)Math.round(Math.random());
-            case NIVEAU_NORMAL :
-                return 1;
-            case NIVEAU_DIFFICILE :
-                return (int)Math.round(Math.random() * 1.5 + 0.5);
-            default:
-                return 0;
-        }
-    }
-
-    /*
-    * Ajoute une ligne de tuile à la hauteur demandée, pour un niveau demandé.
-    * @param hauteur hauteur à laquelle la ligne sera ajoutée
-    * @param niveau niveau de difficulté
-    */
-    private void ajouterLigne(int hauteur, int niveau) {
-        int pos = 0;
-        int nbTile = nbTileRandom(niveau);
-        if (nbTile == NIVEAU_NORMAL || nbTile == NIVEAU_DIFFICILE)
-        {
-            pos = generateRandomPosition();
-            tilesQueue.addTile(hauteur, pos);
-        }
-        if (nbTile == NIVEAU_DIFFICILE)
-        {
-            pos = generateRandomPosition(pos);
-            tilesQueue.addTile(hauteur, pos);
-        }
-    }
-
-    /*
-     * Verifier qu'il n'y ai aucune tile sur les lignes en dessous (c'est pas plutôt en dessus ?)
-     * @param Y ordonnee
-     * @return true si aucune tile n'est en dessous
-     */
-    private boolean premiereTile(float Y) {
-        for(int hauteur = 0; hauteur <  tilesView.getHauteurClicked(Y); hauteur++) {
-            Tile[] tiles = tilesQueue.getTiles(hauteur);
-            for (Tile tile : tiles) {
-                if(tile.isTrueTile() && !tile.isClicked())
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Verifier si les tiles de la hauteur 0 sont toutes a l'etat clicked
-     * @return true si elles sont a l'etat clicked
-     * sinon false
-     */
-    private boolean verificationIsClicked() {
-        Tile[] tiles = tilesQueue.getTiles(0);
-        
-        if(tiles != null) {
-            for(Tile tile : tiles){
-                if (tile.isTrueTile() && !tile.isClicked())
-                {
-                    //juste pour l'affichage de la tuile en rouge (peut etre pas le meilleure solution mais ça rend plutôt bien)
-                    tile.setTrueTile(false);
-                    tile.setClicked();
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gere le jeu en cas de perte
-     */
-    private void gestionPerte() {
-
-        // interruption du timer
-        timer.cancel();
-        timer.purge();
-        Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
-        intent.putExtra("score", score);
-        intent.putExtra("niveau", niveau);
-        startActivity(intent);
-
-    }
-
-    private void gestionAcceleration()
-    {
-        // nombre de tuiles entre chaque acceleration
-        int pas;
-        switch (niveau)
-        {
-            case NIVEAU_FACILE :
-                pas=PAS_ACCELERATION_FACILE;
-                break;
-
-            case NIVEAU_NORMAL :
-                pas=PAS_ACCELERATION_NORMAL;
-                break;
-
-            case NIVEAU_DIFFICILE :
-                pas = PAS_ACCELERATION_DIFFICILE;
-                break;
-            default:
-                pas=0;
-        }
-        if(score%pas==0 && !acceleration) {
-            frequenceDeDefilement+=0.05;
-            acceleration=true;
-        }
-        if(score%pas>0){
-            acceleration=false;
-        }
-        periodeDeDefilement = 1000/frequenceDeDefilement;
-    }
-
-    @Override
-    public void onBackPressed() {
-        // interruption du timer
-        timer.cancel();
-        timer.purge();
-        this.finish();
-    }
-
     private void initSons() {
         mp_SoundTile = MediaPlayer.create(this, R.raw.piano_a_sharp);
         soundUtilise.add(mp_SoundTile);
@@ -433,6 +162,265 @@ public class TilesStartActivity extends Activity {
         {
             ajouterLigne(i, niveau);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
+    }
+
+    /*
+     * ICI - Commentez le code
+     */
+    private boolean onTouchEventHandler (MotionEvent evt){
+        int pointerIndex = evt.getActionIndex();
+        Tile t = tilesView.getClickedTile(evt.getX(pointerIndex), evt.getY(pointerIndex));
+
+        if (!aCommence && t != null && t.isTrueTile() && premiereTile(evt.getY(pointerIndex))) {
+            aCommence = true;
+            tempsCourant = new Date().getTime();
+            tempsDebut = tempsCourant;
+            //System.out.println((int)periodeDeRafraichissement);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    timerHandler();
+                }
+            }, new Date(), (int) periodeDeRafraichissement);
+        }
+
+        if (aCommence && t != null) {
+
+            if (t.isTrueTile())
+            {
+
+                if(premiereTile(evt.getY(pointerIndex))) {
+                    boolean change = t.isClicked();
+                    t.setClicked(true);
+                    if (change != t.isClicked()) {
+                        score++;
+                        playSoundTile(true);
+                    }
+                }
+
+            } else {
+                t.setClicked(true);
+                playSoundTile(false);
+                gestionPerte();
+            }
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param bonne
+     */
+    private void playSoundTile(boolean bonne){
+
+        if (soundOn) {
+            if (bonne) {
+
+                List<MediaPlayer> sonJouable = new ArrayList<MediaPlayer>();
+                int possibilite = 0;
+                for (MediaPlayer mp : soundUtilise) {
+                    if (!mp.isPlaying()) {
+                        sonJouable.add(mp);
+                        possibilite++;
+                    }
+                }
+
+                if (possibilite != 0) {
+                    sonJouable.get((int) (Math.random() * possibilite)).start();
+                }
+
+            } else
+                mp_SoundTileFail.start();
+        }
+    }
+
+    /**
+    * Handler du timer. C'est ici qu'est géré le jeu.
+    */
+    private void timerHandler() {
+        tempsCourant = new Date().getTime();
+        double deltaT = (double) (tempsCourant - tempsDebut);
+        gestionAcceleration();
+        if (deltaT >= periodeDeDefilement)
+        {
+            tempsDebut += periodeDeDefilement;
+            deltaT -= periodeDeDefilement;
+
+            // Verifier que toutes les touches soient pressees
+            if (!verificationIsClicked()) {
+                gestionPerte();
+                deltaT = 0;
+
+            }
+            else {
+                tilesQueue.supprimerLigneBasse();
+                ajouterLigne(NB_TILES_HAUTEUR, niveau);
+            }
+
+        }
+
+        tilesView.setScore(score);
+
+        tilesView.setDecalage(deltaT, periodeDeDefilement);
+    }
+
+    /**
+    * Génère une position horizontale pour une Tile.
+    * @return La position
+    */
+    private int generateRandomPosition() {
+        return (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
+    }
+
+    /**
+    * Génère une position horizontale pour une Tile en excluant la position passée en paramètre.
+    * @param positionInterdite La position à exclure
+    * @return La position
+    */
+    private int generateRandomPosition(int positionInterdite) {
+        int pos;
+        do
+        {
+            pos = (int) Math.round(Math.random() * NB_TILES_LARGEUR - 0.5);
+        } while (pos == positionInterdite);
+        return pos;
+    }
+
+    /**
+    * Génère un nombre de Tile aléatoire pour une ligne selon le niveau du jeu.
+    * @param niveau Niveau du jeu
+    */
+    private int nbTileRandom(int niveau) {
+        switch (niveau)
+        {
+            case NIVEAU_FACILE :
+                return (int)Math.round(Math.random());
+            case NIVEAU_NORMAL :
+                return 1;
+            case NIVEAU_DIFFICILE :
+                return (int)Math.round(Math.random() * 1.5 + 0.5);
+            default:
+                return 0;
+        }
+    }
+
+    /**
+    * Ajoute une ligne de tuile à la hauteur demandée, pour un niveau demandé.
+    * @param hauteur hauteur à laquelle la ligne sera ajoutée
+    * @param niveau niveau de difficulté
+    */
+    private void ajouterLigne(int hauteur, int niveau) {
+        int pos = 0;
+        int nbTile = nbTileRandom(niveau);
+        if (nbTile == NIVEAU_NORMAL || nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition();
+            tilesQueue.addTile(hauteur, pos);
+        }
+        if (nbTile == NIVEAU_DIFFICILE)
+        {
+            pos = generateRandomPosition(pos);
+            tilesQueue.addTile(hauteur, pos);
+        }
+    }
+
+    /**
+     * Verifier qu'il n'y ai aucune tile sur les lignes en dessous (c'est pas plutôt en dessus ?)
+     * @param Y ordonnee
+     * @return true si aucune tile n'est en dessous
+     */
+    private boolean premiereTile(float Y) {
+        for(int hauteur = 0; hauteur <  tilesView.getHauteurClicked(Y); hauteur++) {
+            Tile[] tiles = tilesQueue.getTiles(hauteur);
+            for (Tile tile : tiles) {
+                if(tile.isTrueTile() && !tile.isClicked())
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Verifier si les tiles de la hauteur 0 sont toutes a l'etat clicked
+     * @return true si elles sont a l'etat clicked
+     * sinon false
+     */
+    private boolean verificationIsClicked() {
+        Tile[] tiles = tilesQueue.getTiles(0);
+        
+        if(tiles != null) {
+            for(Tile tile : tiles){
+                if (tile.isTrueTile() && !tile.isClicked())
+                {
+                    //juste pour l'affichage de la tuile en rouge (peut etre pas le meilleure solution mais ça rend plutôt bien)
+                    tile.setTrueTile(false);
+                    tile.setClicked();
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Gere le jeu en cas de perte
+     */
+    private void gestionPerte() {
+
+        // interruption du timer
+        timer.cancel();
+        timer.purge();
+        Intent intent = new Intent(TilesStartActivity.this,PopUpPerdu.class);
+        intent.putExtra("score", score);
+        intent.putExtra("niveau", niveau);
+        startActivity(intent);
+
+    }
+
+    /**
+     *
+     */
+    private void gestionAcceleration() {
+        // nombre de tuiles entre chaque acceleration
+        int pas;
+        switch (niveau)
+        {
+            case NIVEAU_FACILE :
+                pas=PAS_ACCELERATION_FACILE;
+                break;
+
+            case NIVEAU_NORMAL :
+                pas=PAS_ACCELERATION_NORMAL;
+                break;
+
+            case NIVEAU_DIFFICILE :
+                pas = PAS_ACCELERATION_DIFFICILE;
+                break;
+            default:
+                pas=0;
+        }
+        if(score%pas==0 && !acceleration) {
+            frequenceDeDefilement+=0.05;
+            acceleration=true;
+        }
+        if(score%pas>0){
+            acceleration=false;
+        }
+        periodeDeDefilement = 1000/frequenceDeDefilement;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // interruption du timer
+        timer.cancel();
+        timer.purge();
+        this.finish();
     }
 
 }

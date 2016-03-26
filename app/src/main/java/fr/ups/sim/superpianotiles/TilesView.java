@@ -109,7 +109,7 @@ public class TilesView extends View {
         dessinerQuadrillage(canvas);
     }
 
-    /*
+    /**
     * Affiche le score sur le canvas
     * @param canvas Canvas sur lequel afficher le score
     */
@@ -144,9 +144,9 @@ public class TilesView extends View {
 
     }
 
-    /*
+    /**
     * Affiche une tuile sur le canvas à la hauteur (décalée selon la valeur de decalage) demandée
-    * @param tils Tuile à afficher
+    * @param tile Tuile à afficher
     * @param hauteur Hauteur de la tuile
     * @param canvas Canvas sur lequel afficher la tuile
     */
@@ -182,7 +182,6 @@ public class TilesView extends View {
     public void update() {
         postInvalidate();
     }
-
 
     /**
      * Renvoie la Tile sur laquelle l'utilisateur a clique
@@ -223,7 +222,6 @@ public class TilesView extends View {
         return null;
 
     }
-
 
     /**
      * Obtenir la hauteur sur laquelle Y se trouve
@@ -270,7 +268,7 @@ public class TilesView extends View {
         mExampleDrawable = exampleDrawable;
     }
 
-    /*
+    /**
     * Setter sur la file de tuiles
     * @param tilesQueue
     */
@@ -279,10 +277,10 @@ public class TilesView extends View {
         this.tilesQueue = tilesQueue;
     }
 
-    /*
+    /**
     * Calcule le décalage des tuiles par rapport à la position de départ en fonction de la période
     * de défilement et du temps passé depuis la position de départ.
-    * @param detaT Temps depuis la position de départ
+    * @param deltaT Temps depuis la position de départ
     * @param periodeDeDefilement Temps que met une tuile pour avancer d'une distance égale à sa hauteur
     */
     public void setDecalage(double deltaT, double periodeDeDefilement) {
@@ -290,7 +288,7 @@ public class TilesView extends View {
         update();
     }
 
-    /*
+    /**
     * Setter sur le score courant
     * @param score
     */
@@ -299,7 +297,7 @@ public class TilesView extends View {
         update();
     }
 
-    /*
+    /**
     * Change la couleur des tuiles
     */
     public void setTileColor(int color){
