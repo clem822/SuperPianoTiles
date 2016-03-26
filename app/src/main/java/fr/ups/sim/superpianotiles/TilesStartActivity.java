@@ -1,6 +1,8 @@
 package fr.ups.sim.superpianotiles;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -57,6 +59,7 @@ public class TilesStartActivity extends Activity {
 
     private long tempsDebut;
     private long tempsCourant;
+    private long deltaT;
 
     private boolean aCommence = false;
     private boolean perdu = false;
@@ -77,6 +80,7 @@ public class TilesStartActivity extends Activity {
 
         //TODO C'est vraiment utile de stocker sa propre référence ?
         //oui car c'est un bon moyen de la fermer a distance (dans le popup de fin de partie par exemple)
+        //OK
         tilesStartActivity = this;
 
         //Recupere les preferences de l'utilisateur
@@ -192,7 +196,6 @@ public class TilesStartActivity extends Activity {
             aCommence = true;
             tempsCourant = new Date().getTime();
             tempsDebut = tempsCourant;
-            //System.out.println((int)periodeDeRafraichissement);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -257,7 +260,7 @@ public class TilesStartActivity extends Activity {
     */
     private void timerHandler() {
         tempsCourant = new Date().getTime();
-        double deltaT = (double) (tempsCourant - tempsDebut);
+        deltaT = tempsCourant - tempsDebut;
         gestionAcceleration();
         if (deltaT >= periodeDeDefilement)
         {
@@ -433,7 +436,45 @@ public class TilesStartActivity extends Activity {
         // interruption du timer
         timer.cancel();
         timer.purge();
-        this.finish();
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(R.string.titre_menu_pause);
+        dialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                continuerJeu();
+            }
+        });
+        dialogBuilder.setPositiveButton(R.string.bouton_retour_menu, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tilesStartActivity.finish();
+            }
+        });
+        dialogBuilder.setNegativeButton(R.string.bouton_continuer, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                continuerJeu();
+            }
+        });
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    /**
+     *
+     */
+    private void continuerJeu() {
+        //A changer
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timerHandler();
+            }
+        }, new Date(), (int) periodeDeRafraichissement);
+        tempsCourant = new Date().getTime();
+        tempsDebut = tempsCourant - deltaT;
+        //tilesStartActivity.finish();
     }
 
 }

@@ -6,7 +6,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-    android:background="#0188ff">
+        android:background="#0188ff">
 
     <TextView
         android:layout_width="wrap_content"

@@ -4,7 +4,7 @@
     <string name="title_activity_tiles">TilesActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_tiles_start">TilesStartActivity</string>
+    <string name="title_activity_tiles_start">Super Piano Tile</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
     <string name="action_settings">Préférences</string>
@@ -13,4 +13,7 @@
     <string name="bouton_difficile">Niveau Difficile</string>
     <string name="bouton_valider">Valider</string>
     <string name="bouton_ok"> OK </string>
+    <string name="bouton_continuer"> Continuer </string>
+    <string name="bouton_retour_menu"> Menu </string>
+    <string name="titre_menu_pause"> Pause </string>
 </resources>
