@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
@@ -73,10 +74,37 @@ public class TilesStartActivity extends Activity {
     private MediaPlayer mp_SoundTileFail;
     private List<MediaPlayer> soundUtilise = new ArrayList<MediaPlayer>();
 
+    /* Variable pour changement de de couleur background */
+    /*****************************************************/
+    private boolean rouge;
+    private boolean jaune;
+    private boolean vert;
+    private boolean bleu;
+    private boolean violet;
+    private boolean rose;
+
+    private int r;
+    private int g;
+    private int b;
+    /*****************************************************/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiles_start);
+
+        /* initialisation variable couleur background        */
+        /*****************************************************/
+        rouge = false;
+        jaune = false;
+        vert = false;
+        bleu = false;
+        violet = false;
+        rose = true;
+        r = 255;
+        g = 184;
+        b = 184;
+        /*****************************************************/
 
         //TODO C'est vraiment utile de stocker sa propre référence ?
         //oui car c'est un bon moyen de la fermer a distance (dans le popup de fin de partie par exemple)
@@ -89,6 +117,11 @@ public class TilesStartActivity extends Activity {
         //ICI - Commentez le code
         tilesView = (TilesView) findViewById(R.id.view);
         tilesView.setTileColor(preferences.getInt("couleur", Color.rgb(48, 79, 254)));
+
+        /* initialisation couleur background                 */
+        /*****************************************************/
+        tilesView.setBackgroundColor(Color.rgb(r, g, b));
+        /*****************************************************/
 
         //récupération du niveau de la partie
         Intent intent = getIntent();
@@ -205,6 +238,11 @@ public class TilesStartActivity extends Activity {
         }
 
         if (aCommence && t != null) {
+
+            /* changement de couleur de couleur pendant la partie*/
+            /*****************************************************/
+            tilesView.setBackgroundColor(couleurBackground());
+            /*****************************************************/
 
             if (t.isTrueTile())
             {
@@ -476,5 +514,64 @@ public class TilesStartActivity extends Activity {
         tempsDebut = tempsCourant - deltaT;
         //tilesStartActivity.finish();
     }
+
+    /* methode pour changement de couleur background     */
+    /*****************************************************/
+    private int couleurBackground(){
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        if (r == 255 && g == 184 && b == 184 && rose ){
+            System.out.println("+++++++++++++++++++++++-------------------------------++++++++++++++++++");
+            rouge=true;
+            rose=false;
+            g++;
+        }
+        if (rouge){
+            System.out.println("------------------------------------------------------------------------");
+            g++;
+        }
+        if (r == 255 && g == 255 && b == 184 && rouge ){
+            jaune=true;
+            rouge=false;
+            r--;
+        }
+        if (jaune ){
+            r--;
+        }
+        if (r == 184 && g == 255 && b == 184 && jaune ){
+            jaune=false;
+            vert=true;
+            b++;
+        }
+        if (vert ){
+            b++;
+        }
+        if (r== 184 && g == 255 && b == 255 && vert ){
+            vert=false;
+            bleu=true;
+            g--;
+        }
+        if (bleu ){
+            g--;
+        }
+        if (r == 184 && g == 184 && b == 255 && bleu ){
+            bleu=false;
+            violet=true;
+            r++;
+        }
+        if (violet ){
+            r++;
+        }
+        if (r == 255 && g == 184 && b == 255 && violet ){
+            violet=false;
+            rose=true;
+            b--;
+        }
+        if (rose ){
+            b--;
+        }
+        int c = Color.rgb(r, g, b);
+        return c;
+    }
+    /*****************************************************/
 
 }
