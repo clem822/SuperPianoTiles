@@ -88,7 +88,7 @@ public class TilesStartActivity extends Activity {
 
         //ICI - Commentez le code
         tilesView = (TilesView) findViewById(R.id.view);
-        tilesView.setTileColor(preferences.getInt("couleur", Color.BLUE));
+        tilesView.setTileColor(preferences.getInt("couleur", Color.rgb(48, 79, 254)));
 
         //récupération du niveau de la partie
         Intent intent = getIntent();

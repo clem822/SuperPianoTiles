@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
@@ -18,14 +20,17 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 public class SettingsActivity extends Activity {
 
     private CheckBox volume;
+    private RadioButton orange;
+    private RadioButton jaune;
+    private RadioButton vert;
+    private RadioButton bleu;
+    private RadioButton violet;
+    private RadioButton rose;
 
-    private RadioButton couleurBleu;
-    private RadioButton couleurJaune;
-    private RadioButton couleurVert;
+    private RadioGroup couleur;
 
-    private Button valider;
-    private Button defaut;
-    private Button raz;
+    private Button retourMenu;
+    private Button reset;
 
     private SharedPreferences.Editor edit;
     private SharedPreferences preferences;
@@ -38,59 +43,75 @@ public class SettingsActivity extends Activity {
         preferences = getDefaultSharedPreferences(getApplicationContext());
 
         volume = (CheckBox) findViewById(R.id.volume);
+        orange = (RadioButton) findViewById(R.id.orange);
+        jaune = (RadioButton) findViewById(R.id.jaune);
+        vert = (RadioButton) findViewById(R.id.vert);
+        bleu = (RadioButton) findViewById(R.id.bleu);
+        violet = (RadioButton) findViewById(R.id.violet);
+        rose = (RadioButton) findViewById(R.id.rose);
 
-        couleurBleu = (RadioButton) findViewById(R.id.couleurBleu);
-        couleurJaune = (RadioButton) findViewById(R.id.couleurJaune);
-        couleurVert = (RadioButton) findViewById(R.id.couleurVert);
+        couleur = (RadioGroup) findViewById(R.id.couleur);
 
-        defaut = (Button) findViewById(R.id.defaut);
-        valider = (Button) findViewById(R.id.valider);
-        raz = (Button) findViewById(R.id.raz);
+        reset = (Button) findViewById(R.id.reset);
+        retourMenu = (Button) findViewById(R.id.retourMenu);
 
-        volume.setChecked(preferences.getBoolean("volume", true));
-
-        switch ((preferences.getInt("couleur", Color.BLUE)))
-        {
-            case Color.BLUE : couleurBleu.setChecked(true);
-                break;
-            case Color.YELLOW : couleurJaune.setChecked(true);
-                break;
-            case Color.GREEN : couleurVert.setChecked(true);
-                break;
+        if (preferences.getInt("couleur", Color.rgb(48, 79, 254))==Color.rgb(255, 109, 0)){
+            orange.setChecked(true);
+        }
+        if (preferences.getInt("couleur", Color.rgb(48, 79, 254))==Color.rgb(255, 234, 0)){
+            jaune.setChecked(true);
+        }
+        if (preferences.getInt("couleur", Color.rgb(48, 79, 254))==Color.rgb(100, 1221, 23)){
+            vert.setChecked(true);
+        }
+        if (preferences.getInt("couleur", Color.rgb(48, 79, 254))==Color.rgb(48, 79, 254)){
+            bleu.setChecked(true);
+        }
+        if (preferences.getInt("couleur", Color.rgb(48, 79, 254))==Color.rgb(170, 0, 255)){
+            violet.setChecked(true);
+        }
+        if (preferences.getInt("couleur", Color.rgb(48, 79, 254))==Color.rgb(245, 0, 87)){
+            rose.setChecked(true);
         }
 
-        valider.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edit = preferences.edit();
-                edit.putBoolean("volume", volume.isChecked());
-                if(couleurBleu.isChecked()) {
-                    edit.putInt("couleur", Color.BLUE);
-                }
-                if(couleurJaune.isChecked()){
-                    edit.putInt("couleur", Color.YELLOW);
-                }
-                if(couleurVert.isChecked()) {
-                    edit.putInt("couleur", Color.GREEN);
-                }
+        volume.setChecked(preferences.getBoolean("volume",true));
 
+        couleur.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                edit = preferences.edit();
+                if (orange.isChecked()) {
+                    edit.putInt("couleur", Color.rgb(255, 109, 0));
+                }
+                if (jaune.isChecked()) {
+                    edit.putInt("couleur", Color.rgb(255, 234, 0));
+                }
+                if (vert.isChecked()) {
+                    edit.putInt("couleur", Color.rgb(100, 1221, 23));
+                }
+                if (bleu.isChecked()) {
+                    edit.putInt("couleur", Color.rgb(48, 79, 254));
+                }
+                if (violet.isChecked()) {
+                    edit.putInt("couleur", Color.rgb(170, 0, 255));
+                }
+                if (rose.isChecked()) {
+                    edit.putInt("couleur", Color.rgb(245, 0, 87));
+                }
                 edit.apply();
-                finish();
             }
         });
 
-        defaut.setOnClickListener(new View.OnClickListener() {
+        volume.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 edit = preferences.edit();
-                edit.remove("couleur");
-                edit.remove("volume");
+                edit.putBoolean("volume",volume.isChecked());
                 edit.apply();
-                finish();
             }
         });
 
-        raz.setOnClickListener(new View.OnClickListener() {
+        reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 edit = preferences.edit();
@@ -98,6 +119,13 @@ public class SettingsActivity extends Activity {
                 edit.remove("normal");
                 edit.remove("difficile");
                 edit.apply();
+                finish();
+            }
+        });
+
+        retourMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });
