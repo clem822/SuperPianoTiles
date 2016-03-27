@@ -518,15 +518,12 @@ public class TilesStartActivity extends Activity {
     /* methode pour changement de couleur background     */
     /*****************************************************/
     private int couleurBackground(){
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         if (r == 255 && g == 184 && b == 184 && rose ){
-            System.out.println("+++++++++++++++++++++++-------------------------------++++++++++++++++++");
             rouge=true;
             rose=false;
             g++;
         }
         if (rouge){
-            System.out.println("------------------------------------------------------------------------");
             g++;
         }
         if (r == 255 && g == 255 && b == 184 && rouge ){
