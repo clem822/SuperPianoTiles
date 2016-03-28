@@ -573,8 +573,7 @@ public class TilesStartActivity extends Activity {
         if (rose ){
             b--;
         }
-        int c = Color.rgb(r, g, b);
-        return c;
+        return Color.rgb(r, g, b);
     }
     /*****************************************************/
 
