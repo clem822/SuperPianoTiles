@@ -46,6 +46,9 @@ public class TilesStartActivity extends Activity {
     private static final int PAS_ACCELERATION_NORMAL = 25;
     private static final int PAS_ACCELERATION_DIFFICILE = 10;
 
+    private static final int BORNE_COULEUR_MAX = 255;
+    private static final int BORNE_COULEUR_MIN = 184;
+
     private TilesView tilesView;
     private Timer timer;
     private TilesQueue tilesQueue;
@@ -63,7 +66,6 @@ public class TilesStartActivity extends Activity {
     private long deltaT;
 
     private boolean aCommence = false;
-    private boolean perdu = false;
 
     private SharedPreferences preferences;
 
@@ -76,35 +78,22 @@ public class TilesStartActivity extends Activity {
 
     /* Variable pour changement de de couleur background */
     /*****************************************************/
-    private boolean rouge;
-    private boolean jaune;
-    private boolean vert;
-    private boolean bleu;
-    private boolean violet;
-    private boolean rose;
+    private static boolean rouge;
+    private static boolean jaune;
+    private static boolean vert;
+    private static boolean bleu;
+    private static boolean violet;
+    private static boolean rose;
 
-    private int r;
-    private int g;
-    private int b;
+    private static int r;
+    private static int g;
+    private static int b;
     /*****************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiles_start);
-
-        /* initialisation variable couleur background        */
-        /*****************************************************/
-        rouge = false;
-        jaune = false;
-        vert = false;
-        bleu = false;
-        violet = false;
-        rose = true;
-        r = 255;
-        g = 184;
-        b = 184;
-        /*****************************************************/
 
         tilesStartActivity = this;
 
@@ -117,7 +106,7 @@ public class TilesStartActivity extends Activity {
 
         /* initialisation couleur background                 */
         /*****************************************************/
-        tilesView.setBackgroundColor(Color.rgb(r, g, b));
+        initCouleurBackground();
         /*****************************************************/
 
         //récupération du niveau de la partie
@@ -520,8 +509,23 @@ public class TilesStartActivity extends Activity {
 
     /* methode pour changement de couleur background     */
     /*****************************************************/
+
+    public void initCouleurBackground()
+    {
+        rouge = false;
+        jaune = false;
+        vert = false;
+        bleu = false;
+        violet = false;
+        rose = true;
+        r = 255;
+        g = 184;
+        b = 184;
+        tilesView.setBackgroundColor(Color.rgb(r, g, b));
+    }
+
     private int couleurBackground(){
-        if (r == 255 && g == 184 && b == 184 && rose ){
+        if (r == BORNE_COULEUR_MAX && g == BORNE_COULEUR_MIN && b == BORNE_COULEUR_MIN && rose ){
             rouge=true;
             rose=false;
             g++;
@@ -529,7 +533,7 @@ public class TilesStartActivity extends Activity {
         if (rouge){
             g++;
         }
-        if (r == 255 && g == 255 && b == 184 && rouge ){
+        if (r == BORNE_COULEUR_MAX && g == BORNE_COULEUR_MAX && b == BORNE_COULEUR_MIN && rouge ){
             jaune=true;
             rouge=false;
             r--;
@@ -537,7 +541,7 @@ public class TilesStartActivity extends Activity {
         if (jaune ){
             r--;
         }
-        if (r == 184 && g == 255 && b == 184 && jaune ){
+        if (r == BORNE_COULEUR_MIN && g == BORNE_COULEUR_MAX && b == BORNE_COULEUR_MIN && jaune ){
             jaune=false;
             vert=true;
             b++;
@@ -545,7 +549,7 @@ public class TilesStartActivity extends Activity {
         if (vert ){
             b++;
         }
-        if (r== 184 && g == 255 && b == 255 && vert ){
+        if (r== BORNE_COULEUR_MIN && g == BORNE_COULEUR_MAX && b == BORNE_COULEUR_MAX && vert ){
             vert=false;
             bleu=true;
             g--;
@@ -553,7 +557,7 @@ public class TilesStartActivity extends Activity {
         if (bleu ){
             g--;
         }
-        if (r == 184 && g == 184 && b == 255 && bleu ){
+        if (r == BORNE_COULEUR_MIN && g == BORNE_COULEUR_MAX && b == BORNE_COULEUR_MAX && bleu ){
             bleu=false;
             violet=true;
             r++;
@@ -561,7 +565,7 @@ public class TilesStartActivity extends Activity {
         if (violet ){
             r++;
         }
-        if (r == 255 && g == 184 && b == 255 && violet ){
+        if (r == BORNE_COULEUR_MAX && g == BORNE_COULEUR_MIN && b == BORNE_COULEUR_MAX && violet ){
             violet=false;
             rose=true;
             b--;
