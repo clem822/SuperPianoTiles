@@ -47,7 +47,7 @@ public class TilesStartActivity extends Activity {
     private static final int PAS_ACCELERATION_DIFFICILE = 10;
 
     private static final int BORNE_COULEUR_MAX = 255;
-    private static final int BORNE_COULEUR_MIN = 184;
+    private static final int BORNE_COULEUR_MIN = 185;
 
     private TilesView tilesView;
     private Timer timer;
@@ -518,9 +518,9 @@ public class TilesStartActivity extends Activity {
         bleu = false;
         violet = false;
         rose = true;
-        r = 255;
-        g = 184;
-        b = 184;
+        r = BORNE_COULEUR_MAX;
+        g = BORNE_COULEUR_MIN;
+        b = BORNE_COULEUR_MIN;
         tilesView.setBackgroundColor(Color.rgb(r, g, b));
     }
 
