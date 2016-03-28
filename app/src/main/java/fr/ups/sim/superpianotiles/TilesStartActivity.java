@@ -557,7 +557,7 @@ public class TilesStartActivity extends Activity {
         if (bleu ){
             g--;
         }
-        if (r == BORNE_COULEUR_MIN && g == BORNE_COULEUR_MAX && b == BORNE_COULEUR_MAX && bleu ){
+        if (r == BORNE_COULEUR_MIN && g == BORNE_COULEUR_MIN && b == BORNE_COULEUR_MAX && bleu ){
             bleu=false;
             violet=true;
             r++;
