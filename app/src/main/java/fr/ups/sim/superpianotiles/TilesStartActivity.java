@@ -47,7 +47,7 @@ public class TilesStartActivity extends Activity {
     private static final int PAS_ACCELERATION_DIFFICILE = 10;
 
     private TilesView tilesView;
-    private Timer timer = new Timer();
+    private Timer timer;
     private TilesQueue tilesQueue;
     private int niveau;
     private int score = 0;
@@ -106,9 +106,6 @@ public class TilesStartActivity extends Activity {
         b = 184;
         /*****************************************************/
 
-        //TODO C'est vraiment utile de stocker sa propre référence ?
-        //oui car c'est un bon moyen de la fermer a distance (dans le popup de fin de partie par exemple)
-        //OK
         tilesStartActivity = this;
 
         //Recupere les preferences de l'utilisateur
@@ -229,6 +226,7 @@ public class TilesStartActivity extends Activity {
             aCommence = true;
             tempsCourant = new Date().getTime();
             tempsDebut = tempsCourant;
+            timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -472,8 +470,12 @@ public class TilesStartActivity extends Activity {
     @Override
     public void onBackPressed() {
         // interruption du timer
-        timer.cancel();
-        timer.purge();
+        if (timer != null)
+        {
+            timer.cancel();
+            timer.purge();
+        }
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(R.string.titre_menu_pause);
         dialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -502,17 +504,18 @@ public class TilesStartActivity extends Activity {
      *
      */
     private void continuerJeu() {
-        //A changer
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                timerHandler();
-            }
-        }, new Date(), (int) periodeDeRafraichissement);
-        tempsCourant = new Date().getTime();
-        tempsDebut = tempsCourant - deltaT;
-        //tilesStartActivity.finish();
+        if (aCommence)
+        {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    timerHandler();
+                }
+            }, new Date(), (int) periodeDeRafraichissement);
+            tempsCourant = new Date().getTime();
+            tempsDebut = tempsCourant - deltaT;
+        }
     }
 
     /* methode pour changement de couleur background     */
