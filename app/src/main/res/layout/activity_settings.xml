@@ -1,43 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="#dcd9d9"
     android:weightSum="1">
 
 
-    <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/gridView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Couleur des tuiles :"
+        android:text="@string/couleur_tuiles"
         android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal" />
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_centerHorizontal="true"/>
 
     <RadioGroup
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/couleur"
         android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:gravity="center_vertical|center_horizontal"
         android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true">
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp">
 
         <RadioButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/orange"
             android:button="@drawable/orange" />
 
@@ -45,8 +39,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/jaune"
-            android:layout_alignTop="@+id/couleur"
-            android:layout_alignParentStart="true"
             android:button="@drawable/jaune" />
 
         <RadioButton
@@ -79,11 +71,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Volume"
+        android:text="@string/volume"
         android:id="@+id/textView2"
         android:layout_below="@+id/couleur"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_marginBottom="10dp" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -91,26 +83,30 @@
         android:id="@+id/volume"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
         android:button="@drawable/boutonvolume" />
 
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="Menu"
+        android:text="@string/bouton_retour_menu"
         android:id="@+id/retourMenu"
         android:background="@drawable/boutonmenu"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/volume"
-        android:layout_marginTop="50dp" />
+        android:layout_marginLeft="2dp"
+        android:layout_alignTop="@+id/reset"
+        android:layout_alignEnd="@+id/couleur"
+        android:textSize="20sp" />
 
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="Reset scores"
+        android:text="@string/bouton_reset"
         android:id="@+id/reset"
         android:background="@drawable/boutonmenu"
-        android:layout_alignTop="@+id/retourMenu"
-        android:layout_toStartOf="@+id/volume" />
+        android:layout_marginRight="2sp"
+        android:layout_below="@+id/volume"
+        android:layout_toStartOf="@+id/retourMenu"
+        android:textSize="20sp"
+        android:layout_marginBottom="50sp" />
 
 </RelativeLayout>

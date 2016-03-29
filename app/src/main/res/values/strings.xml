@@ -11,9 +11,10 @@
     <string name="bouton_facile">Niveau Facile</string>
     <string name="bouton_normal">Niveau Normal</string>
     <string name="bouton_difficile">Niveau Difficile</string>
-    <string name="bouton_valider">Valider</string>
-    <string name="bouton_ok"> OK </string>
     <string name="bouton_continuer"> Continuer </string>
     <string name="bouton_retour_menu"> Menu </string>
     <string name="titre_menu_pause"> Pause </string>
+    <string name="bouton_reset"> Reset scores </string>
+    <string name="couleur_tuiles">Couleur des tuiles </string>
+    <string name="volume">Volume</string>
 </resources>
