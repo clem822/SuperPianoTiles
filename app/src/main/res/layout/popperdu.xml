@@ -53,27 +53,27 @@
             android:layout_gravity="center_horizontal" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="164dp"
         android:layout_height="wrap_content"
         android:text="Recommencer"
         android:id="@+id/popuprestart"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
-        android:background="#6d2626"
+        android:background="@drawable/boutonpopup"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="108dp"
         android:layout_height="wrap_content"
         android:text="Menu"
         android:id="@+id/popupretourmenu"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
-        android:background="#6d2626"
+        android:background="@drawable/boutonpopup"
         android:layout_marginTop="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
