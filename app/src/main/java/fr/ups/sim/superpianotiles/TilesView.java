@@ -116,10 +116,10 @@ public class TilesView extends View {
     private void afficherScore(Canvas canvas) {
         Rect r = new Rect();
         String scoreString = Integer.toString(score);
-        pText.getTextBounds(scoreString, 0, scoreString.length(), r);
         pText.setColor(Color.RED);
-        pText.setTextSize(60);
-        canvas.drawText(scoreString, contentWidth / 2 - (r.width() / 2), 40 + r.height(), pText);
+        pText.setTextSize(contentHeight / 16);
+        pText.getTextBounds(scoreString, 0, scoreString.length(), r);
+        canvas.drawText(scoreString, contentWidth / 2 - (r.width() / 2), contentHeight / 24 + r.height(), pText);
     }
 
     /**
